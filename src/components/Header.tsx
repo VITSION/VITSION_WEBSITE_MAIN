@@ -13,19 +13,18 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo Block */}
         <div className="flex items-center gap-4">
-          {/* Square Icon Placeholder */}
-          <div className="w-12 h-12 border-2 border-foreground/80 flex items-center justify-center">
-            <div className="w-6 h-6 bg-foreground/20" />
-          </div>
+          <img
+            src="/vitsion_new_logo.png"
+            alt="Vitsion Logo"
+            className="w-[100px] h-[100px] object-contain"
+          />
 
           {/* Logo Text */}
           <div className="flex flex-col">
             <span className="text-2xl font-bold tracking-[0.3em] text-foreground">
               VITSION
             </span>
-            <span className="text-[10px] tracking-[0.4em] text-muted-foreground uppercase">
-              Movie Makers
-            </span>
+
           </div>
         </div>
 

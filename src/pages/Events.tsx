@@ -37,7 +37,7 @@ const Events = () => {
                     changeMenuColorOnOpen={true}
                     colors={['#0a0a0aff', '#f1ececff', '#3a3a3a']}
                     // Using a simple placeholder logo or text if no SVG available
-                    logoUrl="/Vitsio_logo.jpeg"
+                    logoUrl="/vitsion_new_logo.png"
                     accentColor="#0c0c0cff"
                     isFixed={true}
                     className=""

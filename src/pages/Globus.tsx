@@ -133,7 +133,7 @@ const Globus = () => {
                     openMenuButtonColor="#0f0e0eff"
                     changeMenuColorOnOpen={true}
                     colors={['#fff', '#f9f9f9', '#D4AF37']}
-                    logoUrl="/Vitsio_logo.jpeg"
+                    logoUrl="/vitsion_new_logo.png"
                     accentColor="#D4AF37"
                     isFixed={true}
                     className=""

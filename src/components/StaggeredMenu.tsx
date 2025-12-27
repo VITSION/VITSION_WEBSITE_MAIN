@@ -13,7 +13,7 @@ export const StaggeredMenu = ({
     displaySocials = true,
     displayItemNumbering = false,
     className,
-    logoUrl = '/src/assets/logos/reactbits-gh-white.svg',
+    logoUrl = '/vitsion_new_logo.png',
     menuButtonColor = '#fff',
     openMenuButtonColor = '#fff',
     accentColor = '#5227FF',
@@ -378,7 +378,7 @@ export const StaggeredMenu = ({
                         width={110}
                         height={24}
                     />
-                    <span className="sm-header-text">VITSION MOVIE MAKERS</span>
+
                 </div>
                 <button
                     ref={toggleBtnRef}

@@ -8,18 +8,19 @@ type Film = {
   desc: string;
   poster: string;
   color: string;
+  link: string;
 };
 
 const row1: Film[] = [
-  { title: "Inception", desc: "A dream inside a dream inside chaos.", poster: "https://via.placeholder.com/1080x1350", color: "#F4EDE4" },
-  { title: "Interstellar", desc: "Space, time, and love vs physics.", poster: "https://via.placeholder.com/1080x1350", color: "#E7F0F7" },
-  { title: "Whiplash", desc: "Greatness demands sacrifice.", poster: "https://via.placeholder.com/1080x1350", color: "#F7E7E7" },
+  { title: "Inception", desc: "A dream inside a dream inside chaos.", poster: "https://via.placeholder.com/1080x1350", color: "#F4EDE4", link: "/films/padam" },
+  { title: "Interstellar", desc: "Space, time, and love vs physics.", poster: "https://via.placeholder.com/1080x1350", color: "#E7F0F7", link: "/films/padam" },
+  { title: "Whiplash", desc: "Greatness demands sacrifice.", poster: "https://via.placeholder.com/1080x1350", color: "#F7E7E7", link: "/films/padam" },
 ];
 
 const row2: Film[] = [
-  { title: "Fight Club", desc: "Identity, violence, and denial.", poster: "https://via.placeholder.com/1080x1350", color: "#EDE7F7" },
-  { title: "Blade Runner", desc: "What does it mean to be human?", poster: "https://via.placeholder.com/1080x1350", color: "#E7F7EF" },
-  { title: "Dune", desc: "Power belongs to those who control spice.", poster: "https://via.placeholder.com/1080x1350", color: "#F7F3E7" },
+  { title: "Fight Club", desc: "Identity, violence, and denial.", poster: "https://via.placeholder.com/1080x1350", color: "#EDE7F7", link: "/films/padam" },
+  { title: "Blade Runner", desc: "What does it mean to be human?", poster: "https://via.placeholder.com/1080x1350", color: "#E7F7EF", link: "/films/padam" },
+  { title: "Dune", desc: "Power belongs to those who control spice.", poster: "https://via.placeholder.com/1080x1350", color: "#F7F3E7", link: "/films/padam" },
 ];
 
 export default function Films() {
@@ -63,10 +64,12 @@ export default function Films() {
             openMenuButtonColor="#0f0e0eff"
             changeMenuColorOnOpen={true}
             colors={["#0a0a0aff", "#f1ececff", "#3a3a3a"]}
-            logoUrl="/Vitsio_logo.jpeg"
+            logoUrl="/vitsion_new_logo.png"
             accentColor="#0c0c0cff"
             isFixed={true}
             className=""
+            onMenuOpen={() => { }}
+            onMenuClose={() => { }}
           />
         </div>
       </div>
@@ -124,8 +127,10 @@ export default function Films() {
               }}
             >
               {filmsRow1.map((film, i) => (
-                <div
+                <a
                   key={`r1-${i}`}
+                  href={film.link}
+                  className="film-card"
                   style={{
                     width: "240px",
                     padding: "14px",
@@ -134,7 +139,10 @@ export default function Films() {
                     background: film.color,
                     flexShrink: 0,
                     cursor: "pointer",
-                    transform: `rotate(${i % 2 ? "-2deg" : "2deg"})`,
+                    textDecoration: "none",
+                    // @ts-ignore
+                    "--rotate": i % 2 ? "-2deg" : "2deg",
+                    transform: "rotate(var(--rotate))",
                   }}
                 >
                   <div
@@ -170,7 +178,7 @@ export default function Films() {
                   >
                     {film.desc}
                   </p>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -194,8 +202,10 @@ export default function Films() {
               }}
             >
               {filmsRow2.map((film, i) => (
-                <div
+                <a
                   key={`r2-${i}`}
+                  href={film.link}
+                  className="film-card"
                   style={{
                     width: "240px",
                     padding: "14px",
@@ -204,7 +214,10 @@ export default function Films() {
                     background: film.color,
                     flexShrink: 0,
                     cursor: "pointer",
-                    transform: `rotate(${i % 2 ? "-2deg" : "2deg"})`,
+                    textDecoration: "none",
+                    // @ts-ignore
+                    "--rotate": i % 2 ? "-2deg" : "2deg",
+                    transform: "rotate(var(--rotate))",
                   }}
                 >
                   <div
@@ -240,14 +253,14 @@ export default function Films() {
                   >
                     {film.desc}
                   </p>
-                </div>
+                </a>
               ))}
             </div>
           </div>
         </section>
       </div>
 
-      <style jsx global>{`
+      <style>{`
         @keyframes moveLeft {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
@@ -255,6 +268,16 @@ export default function Films() {
         @keyframes moveRight {
           0% { transform: translateX(-50%); }
           100% { transform: translateX(0); }
+        }
+        
+        /* Film card hover effect */
+        .film-card {
+          transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
+        }
+        .film-card:hover {
+          transform: rotate(var(--rotate)) scale(1.1) !important;
+          z-index: 10;
+          box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
         }
       `}</style>
     </>

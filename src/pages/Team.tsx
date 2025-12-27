@@ -6,7 +6,7 @@ const items = [
     {
         image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=800',
         link: '#',
-        link: '#',
+
         title: 'RajaRejshwari',
         description: 'Event Leads'
     },
@@ -90,7 +90,7 @@ export default function Team() {
                     changeMenuColorOnOpen={true}
                     colors={['#0a0a0aff', '#f1ececff', '#3a3a3a']}
                     // Using a simple placeholder logo or text if no SVG available
-                    logoUrl="/Vitsio_logo.jpeg"
+                    logoUrl="/vitsion_new_logo.png"
                     accentColor="#0c0c0cff"
                     isFixed={true}
                     className=""

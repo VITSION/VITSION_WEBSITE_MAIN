@@ -43,22 +43,14 @@
 
 .sm-logo-img {
     display: block;
-    height: 60px;
+    height: 100px;
     /* Made bigger */
     width: auto;
     object-fit: contain;
     border-radius: 50%;
 }
 
-/* New: Header text for VITSION MOVIE MAKERS */
-.sm-header-text {
-    font-family: inherit;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #fff;
-    font-size: 1.25rem;
-    letter-spacing: 0.1em;
-}
+
 
 .sm-toggle {
     position: relative;
@@ -380,8 +372,8 @@
 }
 
 .sm-panel-logo-img {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 50%;
     /* Ensure it stands out */
