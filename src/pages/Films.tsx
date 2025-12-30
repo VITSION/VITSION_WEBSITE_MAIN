@@ -117,23 +117,7 @@ const row2: Film[] = [
   },
 ];
 // ... existing code ...
-{/* Action Buttons */ }
-<div className="flex items-center gap-4 pt-2">
-  <Button
-    onClick={() => window.open(selectedFilm.link, '_blank')}
-    className="h-12 px-8 bg-red-600 hover:bg-red-700 text-white font-bold text-lg rounded-lg transition-all shadow-lg hover:shadow-red-900/20 flex items-center gap-2 border-none"
-  >
-    <Play className="w-5 h-5 fill-current" />
-    Watch Now
-  </Button>
 
-  <Button
-    variant="outline"
-    className="h-12 w-12 p-0 rounded-lg border-gray-600 bg-white/10 hover:bg-white/20 text-white transition-colors"
-  >
-    <Plus className="w-6 h-6" />
-  </Button>
-</div>
 
 export default function Films() {
   const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
@@ -233,13 +217,13 @@ export default function Films() {
             overflow: "visible",
           }}
         >
-          <div style={{ overflow: "visible" }}>
+          <div className="film-strip-row move-left" style={{ overflow: "hidden" }}>
             <div
               style={{
                 display: "flex",
                 width: "max-content",
-                animation: "moveLeft 20s linear infinite",
-                columnGap: "8px",
+                animation: "moveLeft 40s linear infinite",
+                columnGap: "0px",
               }}
             >
               {filmsRow1.map((film, i) => (
@@ -248,57 +232,27 @@ export default function Films() {
                   onClick={() => setSelectedFilm(film)}
                   className="film-card"
                   style={{
-                    width: "240px",
-                    padding: "14px",
-                    borderRadius: "8px",
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.45)",
-                    background: film.color,
+                    width: "300px",
+                    padding: "20px",
                     flexShrink: 0,
                     cursor: "pointer",
                     textDecoration: "none",
-                    // @ts-ignore
-                    "--rotate": i % 2 ? "-2deg" : "2deg",
-                    transform: "rotate(var(--rotate))",
+                    position: "relative"
                   }}
                 >
                   <div
                     style={{
                       width: "100%",
-                      height: 0,
-                      paddingBottom: "125%",
-                      borderRadius: "6px",
-                      marginBottom: "10px",
-                      backgroundImage: `url(${film.poster})`,
+                      aspectRatio: "2/3",
+                      borderRadius: "4px",
+                      marginBottom: "0",
+                      backgroundImage: `url('${film.poster}')`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
-                      backgroundColor: "#ddd",
+                      backgroundColor: "#333",
+                      border: "1px solid #333"
                     }}
                   />
-                  <h3
-                    style={{
-                      fontSize: "1rem",
-                      margin: "0 0 6px 0",
-                      color: "#111",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {film.title}
-                  </h3>
-                  <p
-                    className="line-clamp-2"
-                    style={{
-                      fontSize: "0.85rem",
-                      lineHeight: 1.35,
-                      color: "#333",
-                      margin: 0,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden"
-                    }}
-                  >
-                    {film.desc}
-                  </p>
                 </div>
               ))}
             </div>
@@ -313,13 +267,13 @@ export default function Films() {
             overflow: "visible",
           }}
         >
-          <div style={{ overflow: "visible" }}>
+          <div className="film-strip-row move-right" style={{ overflow: "hidden" }}>
             <div
               style={{
                 display: "flex",
                 width: "max-content",
-                animation: "moveRight 20s linear infinite",
-                columnGap: "8px",
+                animation: "moveRight 40s linear infinite",
+                columnGap: "0px",
               }}
             >
               {filmsRow2.map((film, i) => (
@@ -328,57 +282,27 @@ export default function Films() {
                   onClick={() => setSelectedFilm(film)}
                   className="film-card"
                   style={{
-                    width: "240px",
-                    padding: "14px",
-                    borderRadius: "8px",
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.45)",
-                    background: film.color,
+                    width: "300px",
+                    padding: "20px",
                     flexShrink: 0,
                     cursor: "pointer",
                     textDecoration: "none",
-                    // @ts-ignore
-                    "--rotate": i % 2 ? "-2deg" : "2deg",
-                    transform: "rotate(var(--rotate))",
+                    position: "relative"
                   }}
                 >
                   <div
                     style={{
                       width: "100%",
-                      height: 0,
-                      paddingBottom: "125%",
-                      borderRadius: "6px",
-                      marginBottom: "10px",
-                      backgroundImage: `url(${film.poster})`,
+                      aspectRatio: "2/3",
+                      borderRadius: "4px",
+                      marginBottom: "0",
+                      backgroundImage: `url('${film.poster}')`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
-                      backgroundColor: "#ddd",
+                      backgroundColor: "#333",
+                      border: "1px solid #333"
                     }}
                   />
-                  <h3
-                    style={{
-                      fontSize: "1rem",
-                      margin: "0 0 6px 0",
-                      color: "#111",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {film.title}
-                  </h3>
-                  <p
-                    className="line-clamp-2"
-                    style={{
-                      fontSize: "0.85rem",
-                      lineHeight: 1.35,
-                      color: "#333",
-                      margin: 0,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden"
-                    }}
-                  >
-                    {film.desc}
-                  </p>
                 </div>
               ))}
             </div>
@@ -391,75 +315,71 @@ export default function Films() {
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
           <div className="relative w-full max-w-5xl bg-[#141414] rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/10">
 
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedFilm(null)}
-              className="absolute top-4 right-4 z-20 p-2 bg-black/50 hover:bg-black/80 text-white rounded-full transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-
             <div className="flex flex-col md:flex-row h-full max-h-[90vh] overflow-y-auto md:overflow-hidden">
 
-              {/* Backdrop Image Area */}
-              <div className="relative w-full md:w-2/3 h-[50vh] md:h-auto">
-                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#141414] via-transparent to-transparent z-10" />
+              {/* Mobile: Image Area */}
+              <div className="relative w-full md:w-2/3 h-auto md:h-full flex-shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent z-10 md:hidden" />
                 <img
                   src={selectedFilm.banner}
                   alt={selectedFilm.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto md:h-full object-cover"
                 />
               </div>
 
               {/* Content Area */}
-              <div className="w-full md:w-2/3 absolute md:relative bottom-0 left-0 md:inset-0 p-8 md:p-12 flex flex-col justify-end md:justify-center z-10">
-                <div className="md:max-w-xl space-y-6">
+              <div className="w-full md:w-1/3 relative p-6 md:p-12 flex flex-col justify-start md:justify-center items-start gap-6 bg-[#141414] z-20">
 
-                  {/* Title & Logo Placeholder */}
-                  <div>
-                    {/* You could put a logo image here if you have one, using text for now */}
-                    <h2 className="text-4xl md:text-6xl font-bold text-white tracking-wide uppercase drop-shadow-lg mb-2">
-                      {selectedFilm.title}
-                    </h2>
-                  </div>
+                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-wide uppercase leading-tight text-left pr-10">
+                  {selectedFilm.title}
+                </h2>
 
-                  {/* Metadata */}
-                  <div className="flex flex-col gap-2 text-gray-300 text-sm md:text-base font-medium">
-                    <span className="text-white">Director: <span className="text-gray-400">{selectedFilm.director}</span></span>
-                    <div className="flex items-center gap-3">
-                      <span>{selectedFilm.language}</span>
-                    </div>
-                  </div>
+                {/* Metadata */}
+                <div className="flex flex-wrap gap-x-4 gap-y-2 text-gray-400 text-sm md:text-base font-medium">
+                  <span className="text-white">{selectedFilm.year}</span>
+                  <span>•</span>
+                  <span>{selectedFilm.duration}</span>
+                  <span>•</span>
+                  <span>{selectedFilm.language}</span>
+                </div>
 
-                  {/* Description */}
-                  <p className="text-gray-300 text-sm md:text-lg leading-relaxed md:line-clamp-4 drop-shadow-md">
-                    {selectedFilm.desc}
-                  </p>
+                {/* Action Buttons */}
+                <div className="w-full flex items-center gap-4">
+                  <Button
+                    onClick={() => window.open(selectedFilm.link, '_blank')}
+                    className="flex-1 md:flex-none h-12 px-8 bg-red-600 hover:bg-red-700 text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <Play className="w-5 h-5 fill-current" />
+                    Watch Now
+                  </Button>
+                </div>
 
-                  {/* Genres */}
-                  <div className="flex items-center gap-2 text-sm text-white font-medium">
-                    <span>{selectedFilm.genre}</span>
-                  </div>
+                {/* Description */}
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed text-left">
+                  {selectedFilm.desc}
+                </p>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-4 pt-2">
-                    <Button
-                      onClick={() => window.open(selectedFilm.link, '_blank')}
-                      className="h-12 px-8 bg-red-600 hover:bg-red-700 text-white font-bold text-lg rounded-lg transition-all shadow-lg hover:shadow-red-900/20 flex items-center gap-2 border-none"
-                    >
-                      <Play className="w-5 h-5 fill-current" />
-                      Watch Now
-                    </Button>
-                  </div>
-
+                <div className="flex flex-wrap gap-2 text-xs text-gray-500 uppercase tracking-widest">
+                  {selectedFilm.genre}
                 </div>
               </div>
             </div>
+
+            {/* Close Button - Moved to end for Z-index stacking */}
+            <button
+              onClick={() => setSelectedFilm(null)}
+              className="absolute top-4 right-4 z-[100] p-2 bg-black/50 hover:bg-black/80 text-white rounded-full transition-colors border border-white/10"
+              aria-label="Close modal"
+            >
+              <X className="w-6 h-6" />
+            </button>
           </div>
         </div>
       )}
 
+
       <style>{`
+        /* Film Strip Animation & Styling */
         @keyframes moveLeft {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
@@ -468,15 +388,70 @@ export default function Films() {
           0% { transform: translateX(-50%); }
           100% { transform: translateX(0); }
         }
-        
-        /* Film card hover effect */
-        .film-card {
-          transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
+
+        .film-strip-row {
+          position: relative;
+          background: #050505;
+          padding: 40px 0;
+          margin: 20px 0;
+          border-top: 2px solid #222;
+          border-bottom: 2px solid #222;
+          box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
         }
+
+        /* Film card styling */
+        .film-card {
+          position: relative;
+          background: #000;
+          border-left: 4px solid #111;
+          border-right: 4px solid #111;
+          margin: 0; /* Continuous strip */
+          transition: filter 0.3s ease;
+        }
+
+        /* Sprocket Holes - Top & Bottom */
+        .film-card::before,
+        .film-card::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          width: 100%;
+          height: 25px;
+          background-image: radial-gradient(circle, #333 4px, transparent 5px);
+          background-size: 20px 100%; /* Spacing of holes */
+          background-position: center;
+          background-repeat: repeat-x;
+          z-index: 2;
+        }
+
+        .film-card::before {
+          top: 0;
+          border-bottom: 1px solid #222;
+        }
+
+        .film-card::after {
+          bottom: 0;
+          border-top: 1px solid #222;
+        }
+
+        /* Hover Effect: Highlight the frame */
         .film-card:hover {
-          transform: rotate(var(--rotate)) scale(1.1) !important;
+          filter: brightness(1.3) contrast(1.1);
           z-index: 10;
-          box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
+        }
+
+        /* Glossy Shine Overlay */
+        .film-car-inner-shine {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            105deg,
+            transparent 20%,
+            rgba(255, 255, 255, 0.05) 25%,
+            transparent 30%
+          );
+          pointer-events: none;
+          z-index: 5;
         }
       `}</style>
     </>

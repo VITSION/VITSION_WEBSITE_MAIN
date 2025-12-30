@@ -126,8 +126,7 @@ export default function Events25_26() {
             <div className={`fixed inset-0 z-[2000] bg-black/50 transition-opacity duration-300 ${showBento ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} onClick={() => setShowBento(false)} />
 
             <div
-                className={`fixed top-0 right-0 h-full w-full md:w-[80vw] lg:w-[70vw] bg-[#060010] z-[2001] shadow-2xl transform transition-transform duration-500 ease-in-out ${showBento ? 'translate-x-0' : 'translate-x-full'}`}
-                style={{ borderLeft: "1px solid #333" }}
+                className={`fixed top-0 right-0 h-full w-full md:w-[80vw] lg:w-[70vw] z-[2001] transform transition-transform duration-500 ease-in-out ${showBento ? 'translate-x-0' : 'translate-x-full'}`}
             >
                 <button
                     onClick={() => setShowBento(false)}
