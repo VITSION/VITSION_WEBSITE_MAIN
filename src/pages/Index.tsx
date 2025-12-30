@@ -1,29 +1,13 @@
 import LightRays from "@/components/LightRays";
-import StaggeredMenu from "@/components/StaggeredMenu";
 import EventAnnouncement from "@/components/EventAnnouncement";
+import FloatingDockNav from "@/components/FloatingDockNav";
+import UpcomingMovie from "@/components/UpcomingMovie";
 
 const Index = () => {
-  const menuItems = [
-    { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
-    { label: 'Globus', ariaLabel: 'Globus', link: '/globus' },
-    { label: 'Events', ariaLabel: 'View our events', link: '/events' },
-    { label: 'Films', ariaLabel: 'View our films', link: '/films' },
-    { label: 'Gallery', ariaLabel: 'Browse gallery', link: '/gallery' },
-    { label: 'Team', ariaLabel: 'Meet the team', link: '/team' },
-    { label: 'Contact', ariaLabel: 'Get in touch', link: '/contact' }
-  ];
-
-  const socialItems = [
-    { label: 'Instagram', link: 'https://www.instagram.com/vitsionmoviemakers' },
-    { label: 'Linkedin', link: 'https://www.linkedin.com/company/vitsionmoviemakersclub/' },
-    { label: 'LetterBox', link: 'https://letterboxd.com/vitsion/' },
-    { label: 'YouTube', link: 'http://www.youtube.com/@VITSIONMovieMakers' }
-  ];
-
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-background">
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-background">
       {/* Background Layer - Light Rays Animation */}
-      <div className="absolute inset-0 z-0">
+      <div className="fixed inset-0 z-0">
         <LightRays
           raysOrigin="top-center"
           raysColor="#4a9eff"
@@ -38,31 +22,13 @@ const Index = () => {
         />
       </div>
 
-      {/* Staggered Menu Overlay */}
-      <div className="absolute inset-0 z-50 pointer-events-none">
-        <StaggeredMenu
-          position="right"
-          items={menuItems}
-          socialItems={socialItems}
-          displaySocials={true}
-          displayItemNumbering={false}
-          menuButtonColor="#f1efefff"
-          openMenuButtonColor="#0f0e0eff"
-          changeMenuColorOnOpen={true}
-          colors={['#0a0a0aff', '#f1ececff', '#3a3a3a']}
-          // Using a simple placeholder logo or text if no SVG available
-          logoUrl="/vitsion white.png"
-          accentColor="#0c0c0cff"
-          isFixed={false}
-          className=""
-          onMenuOpen={() => { }}
-          onMenuClose={() => { }}
-        />
-      </div>
+      {/* Floating Dock Navigation */}
+      <FloatingDockNav />
 
       {/* Main Content Area */}
-      <main className="relative z-10 h-full flex items-center justify-center">
+      <main className="relative z-10 w-full flex flex-col items-center justify-start py-10 space-y-20 pt-32">
         <EventAnnouncement />
+        <UpcomingMovie />
       </main>
     </div>
   );
