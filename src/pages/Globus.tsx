@@ -24,15 +24,14 @@ const Globus = () => {
     ];
 
     return (
+        <section>
         <div className="relative min-h-screen w-full overflow-hidden bg-[#2a0845] text-white">
             <CurtainReveal />
             {/* Background stars in Gold, Purple background */}
-            <StarField speed={1} backgroundColor="#2a0845" starColor="#D4AF37" />
-
-
+            <StarField speed={1} backgroundColor="#000000ff" starColor="#d1ab2eff" />
 
             {/* Staggered Menu Overlay */}
-            <div className="absolute inset-0 z-50 pointer-events-none sticky top-0 h-screen w-full">
+            <div className="absolute inset-0 z-50 pointer-events-none  top-0 h-screen w-full">
                 <StaggeredMenu
                     position="right"
                     items={menuItems}
@@ -49,9 +48,8 @@ const Globus = () => {
                     className=""
                     onMenuOpen={() => { }}
                     onMenuClose={() => { }}
-                />
+                    />
             </div>
-
             <main className="relative z-10 flex flex-col items-center justify-center h-screen px-4">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -60,7 +58,7 @@ const Globus = () => {
                     className="text-center"
                 >
                     <motion.h1
-                        className="text-6xl md:text-9xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F7E7CE] to-[#AA8c2C] mb-8 drop-shadow-sm"
+                        className="text-5xl md:text-9xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F7E7CE] to-[#AA8c2C] mb-8 drop-shadow-sm"
                         animate={{
                             backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                         }}
@@ -87,7 +85,9 @@ const Globus = () => {
                     </motion.div>
                 </motion.div>
             </main>
+    
         </div>
+    </section>
     );
 };
 

@@ -1,6 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 
-const StarField = ({ speed = 0.5, backgroundColor = "black", starColor = "white" }) => {
+const StarField = ({
+    speed = 0.5,
+    backgroundColor = "black",
+    starColor = "white",
+    className = "",
+    style = {}
+}) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -74,6 +80,7 @@ const StarField = ({ speed = 0.5, backgroundColor = "black", starColor = "white"
     return (
         <canvas
             ref={canvasRef}
+            className={className}
             style={{
                 position: 'fixed',
                 top: 0,
@@ -81,7 +88,8 @@ const StarField = ({ speed = 0.5, backgroundColor = "black", starColor = "white"
                 width: '100vw',
                 height: '100vh',
                 zIndex: 0,
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                ...style
             }}
         />
     );

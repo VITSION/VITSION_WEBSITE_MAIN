@@ -15,12 +15,10 @@ const UpcomingMovie = () => {
 
                 {/* Text Content */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-500 delay-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
-                        Upcoming Movie
-                    </h2>
-                    <p className="text-gray-300 text-lg tracking-[0.5em] uppercase mt-4 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-200">
-                        Coming really soon
-                    </p>
+                    <h3 className="text-5xl md:text-7xl font-black text-white tracking-tighter uppercase opacity-0 group-hover:opacity-100 transform translate-y-10 group-hover:translate-y-0 transition-all duration-500 delay-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                        Coming SOON !!
+                    </h3>
+
                 </div>
             </div>
         </div>

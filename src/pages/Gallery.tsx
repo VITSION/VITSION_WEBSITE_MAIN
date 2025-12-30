@@ -24,7 +24,8 @@ const Gallery = () => {
 
     return (
         <div className="relative min-h-screen w-full overflow-x-hidden bg-background">
-            <div className="absolute inset-0 z-50 pointer-events-none sticky top-0 h-screen w-full">
+            <div className="fixed top-6 right-6 z-50">
+
                 <StaggeredMenu
                     position="right"
                     items={menuItems}
@@ -55,13 +56,13 @@ const Gallery = () => {
                     GALLERY
                 </h1>
 
-                <div className="w-full h-full min-h-screen px-2 md:px-0">
+                <div className="w-full h-full px-2 md:px-0">
                     <Masonry
                         items={items}
                         ease="power3.out"
                         duration={0.6}
                         stagger={0.05}
-                        animateFrom="bottom"
+                        animateFrom="fade"
                         scaleOnHover={true}
                         blurToFocus={true}
                         colorShiftOnHover={false}

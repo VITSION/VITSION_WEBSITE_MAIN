@@ -117,6 +117,8 @@ const Masonry = ({
                     x: containerRect.width / 2 - item.w / 2,
                     y: containerRect.height / 2 - item.h / 2
                 };
+            case 'fade':
+                return { x: item.x, y: item.y };
             default:
                 return { x: item.x, y: item.y + 100 };
         }
