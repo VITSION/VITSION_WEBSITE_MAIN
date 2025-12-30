@@ -78,10 +78,42 @@
   font-size: 26px;
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1024px) {
+  .face-title {
+    font-size: 2rem;
+    left: 50%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
 
-  .face-title,
   .face-description {
-    display: none;
+    font-size: 1rem;
+    left: 50%;
+    right: auto;
+    top: 85%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: none;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@media (max-width: 600px) {
+  .face-title {
+    font-size: 1.5rem;
+    top: 12%;
+  }
+
+  .face-description {
+    font-size: 0.9rem;
+    top: 88%;
+    padding: 0.8rem;
   }
 }

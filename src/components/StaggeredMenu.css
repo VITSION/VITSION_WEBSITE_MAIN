@@ -374,6 +374,31 @@
     .staggered-menu-wrapper[data-open] .sm-logo-img {
         filter: invert(100%);
     }
+
+    /* Mobile Header Optimizations */
+    .staggered-menu-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .sm-logo-img {
+        height: 60px;
+        /* Reduced from 100px */
+    }
+
+    /* Force solid text (glow effect) on mobile since there is no hover */
+    .sm-panel-item {
+        color: #fff;
+        -webkit-text-stroke: 0px transparent;
+        text-stroke: 0px transparent;
+        opacity: 1 !important;
+    }
+
+    /* Disable the dimming effect on mobile list hover */
+    .sm-panel-list:hover .sm-panel-item {
+        opacity: 1;
+        -webkit-text-stroke: 0px transparent;
+        text-stroke: 0px transparent;
+    }
 }
 
 /* Centered header inside the menu panel */
