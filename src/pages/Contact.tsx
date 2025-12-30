@@ -25,7 +25,7 @@ const Contact = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#0a0a0aff] text-white font-sans selection:bg-white/20">
+        <div className="min-h-screen w-full overflow-y-auto md:h-screen md:overflow-hidden bg-[#0a0a0aff] text-white font-sans selection:bg-white/20 flex flex-col items-center justify-center">
             {/* MENU */}
             <div className="fixed inset-0 z-[999] pointer-events-none">
                 <div className="pointer-events-auto">
@@ -49,8 +49,8 @@ const Contact = () => {
                 </div>
             </div>
 
-            <main className="container mx-auto px-6 py-24 md:py-32 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
+            <main className="container mx-auto px-6 pt-28 pb-12 md:py-0 relative z-10 w-full max-w-6xl flex-grow flex flex-col justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
 
                     {/* Left Column: Get in Touch */}
                     <div className="space-y-8 animate-fade-in-up">
@@ -112,49 +112,49 @@ const Contact = () => {
                     </div>
 
                     {/* Right Column: Contact Form */}
-                    <div className="space-y-8 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+                    <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
                         <div>
-                            <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Need Help?</h2>
-                            <p className="text-gray-400 text-lg leading-relaxed">
-                                Have a specific question or need assistance with a project? Fill out the form
-                                below and we'll get back to you as soon as possible.
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">Need Help?</h2>
+                            <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-sm">
+                                Have a specific question or need assistance? Fill out the form
+                                below and we'll get back to you soon.
                             </p>
                         </div>
 
-                        <form className="space-y-6 pt-4">
-                            <div className="space-y-2">
-                                <label htmlFor="name" className="text-sm font-medium text-gray-300 ml-1">Your Name</label>
+                        <form className="space-y-4 pt-2">
+                            <div className="space-y-1.5">
+                                <label htmlFor="name" className="text-xs font-medium text-gray-300 ml-1">Your Name</label>
                                 <Input
                                     id="name"
                                     placeholder="Enter your name"
-                                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 h-14 rounded-xl focus:border-white/30 focus:ring-0 transition-colors"
+                                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 h-12 rounded-xl focus:border-white/30 focus:ring-0 transition-colors text-sm"
                                 />
                             </div>
 
-                            <div className="space-y-2">
-                                <label htmlFor="email" className="text-sm font-medium text-gray-300 ml-1">Your Email</label>
+                            <div className="space-y-1.5">
+                                <label htmlFor="email" className="text-xs font-medium text-gray-300 ml-1">Your Email</label>
                                 <Input
                                     id="email"
                                     type="email"
                                     placeholder="Enter your email"
-                                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 h-14 rounded-xl focus:border-white/30 focus:ring-0 transition-colors"
+                                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 h-12 rounded-xl focus:border-white/30 focus:ring-0 transition-colors text-sm"
                                 />
                             </div>
 
-                            <div className="space-y-2">
-                                <label htmlFor="message" className="text-sm font-medium text-gray-300 ml-1">Message</label>
+                            <div className="space-y-1.5">
+                                <label htmlFor="message" className="text-xs font-medium text-gray-300 ml-1">Message</label>
                                 <Textarea
                                     id="message"
                                     placeholder="How can we help you?"
-                                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 min-h-[150px] rounded-xl focus:border-white/30 focus:ring-0 resize-none transition-colors"
+                                    className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 min-h-[120px] rounded-xl focus:border-white/30 focus:ring-0 resize-none transition-colors text-sm"
                                 />
                             </div>
 
                             <Button
-                                className="w-full h-14 bg-white text-black hover:bg-gray-200 text-lg font-medium rounded-xl transition-colors mt-4"
+                                className="w-full h-12 bg-white text-black hover:bg-gray-200 text-base font-medium rounded-xl transition-colors mt-2"
                             >
                                 Send Message
-                                <Send className="w-5 h-5 ml-2" />
+                                <Send className="w-4 h-4 ml-2" />
                             </Button>
                         </form>
                     </div>
