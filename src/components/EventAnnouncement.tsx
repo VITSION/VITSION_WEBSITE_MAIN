@@ -2,15 +2,18 @@ import { Button } from "@/components/ui/button";
 
 const EventAnnouncement = () => {
     return (
-        <div className="relative w-full max-w-6xl mx-auto h-[600px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl my-12 group">
+        <div className="relative w-full max-w-6xl mx-auto h-[600px] rounded-3xl overflow-hidden my-12 group">
             {/* Background Image with low opacity */}
             <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                 style={{
-                    backgroundImage: 'url("/Events/Retrograde.JPG")',
+                    backgroundImage: 'url("/Events/Retrograde.webp")',
                     opacity: 0.5
                 }}
             />
+
+            {/* Vignette Overlay to blend edges into background */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,#000000_100%)] opacity-80" />
 
             {/* Dark Overlay for better text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
