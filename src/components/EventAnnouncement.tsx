@@ -2,11 +2,7 @@ import { Button } from "@/components/ui/button";
 
 const EventAnnouncement = () => {
     return (
-<<<<<<< HEAD
-        <div className="relative w-full max-w-6xl mx-auto h-[500px] md:h-[600px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group mx-4 md:mx-auto">
-=======
-        <div className="relative w-full max-w-6xl mx-auto h-[600px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl my-12 group">
->>>>>>> bd672d170dca67d91ec4d09df14ffe4f2172ebea
+        <div className="relative w-full max-w-6xl mx-auto h-[500px] md:h-[600px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl my-12 group mx-4 md:mx-auto">
             {/* Background Image with low opacity */}
             <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
