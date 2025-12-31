@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import StaggeredMenu from "@/components/StaggeredMenu";
-import { X, Play, Plus } from "lucide-react";
+import { X, Play, ArrowLeft, ArrowRight } from "lucide-react"; // Added ArrowLeft/Right for potential controls
 import { Button } from "@/components/ui/button";
 
 type Film = {
@@ -116,11 +116,10 @@ const row2: Film[] = [
     director: "Denis Villeneuve"
   },
 ];
-// ... existing code ...
-
 
 export default function Films() {
   const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const menuItems = [
     { label: "Home", ariaLabel: "Go to home page", link: "/" },
@@ -139,12 +138,12 @@ export default function Films() {
     { label: "YouTube", link: "http://www.youtube.com/@VITSIONMovieMakers" },
   ];
 
-  const filmsRow1 = [...row1, ...row1, ...row1, ...row1];
-  const filmsRow2 = [...row2, ...row2, ...row2, ...row2];
+  // Combine rows for the single strip - duplicated 8x for safety on wide screens
+  const allFilms = [...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2];
 
   return (
     <>
-      {/* MENU */}
+      {/* MENU - Updated button color for white bg */}
       <div
         style={{
           position: "fixed",
@@ -160,7 +159,7 @@ export default function Films() {
             socialItems={socialItems}
             displaySocials={true}
             displayItemNumbering={false}
-            menuButtonColor="#f1efefff"
+            menuButtonColor="#ffffff"
             openMenuButtonColor="#0f0e0eff"
             changeMenuColorOnOpen={true}
             colors={["#0a0a0aff", "#f1ececff", "#3a3a3a"]}
@@ -174,143 +173,104 @@ export default function Films() {
         </div>
       </div>
 
-      {/* PAGE */}
+      {/* PAGE CONTAINER */}
       <div
-        style={{
-          background: "#000",
-          color: "#fff",
-          minHeight: "100vh",
-          overflowX: "hidden",
-          fontFamily: "system-ui, sans-serif",
-        }}
+        className="w-full h-screen bg-black flex flex-col items-start justify-center overflow-hidden relative gap-8 pt-24 md:gap-12 md:pt-32"
       >
-        {/* HERO */}
-        <section
-          style={{
-            height: "auto",
-            minHeight: "0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "#000",
-            padding: 0,
-            margin: 0,
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "clamp(3rem, 7vw, 6rem)",
-              letterSpacing: "0.12em",
-              margin: 0,
-              fontWeight: 700,
-            }}
-          >
-            FILMS
-          </h1>
-        </section>
 
         {/* ROW 1: MOVES LEFT */}
-        <section
-          style={{
-            padding: "40px 0 80px",
-            margin: "0 0 60px",
-            overflow: "visible",
-          }}
+        <div
+          className="w-full overflow-hidden flex items-center justify-start"
         >
-          <div className="film-strip-row move-left" style={{ overflow: "hidden" }}>
-            <div
-              style={{
-                display: "flex",
-                width: "max-content",
-                animation: "moveLeft 40s linear infinite",
-                columnGap: "0px",
-              }}
-            >
-              {filmsRow1.map((film, i) => (
+          <div
+            className="film-track flex relative items-center px-0 min-w-max hover:paused"
+            style={{
+              animation: 'moveFilmRoll 60s linear infinite',
+            }}
+          >
+            {/* PERFORATIONS TOP */}
+            <div className="film-perforation film-perforation-top" />
+
+            {/* FILMS */}
+            {allFilms.map((film, i) => (
+              <div
+                key={`r1-film-${i}`}
+                onClick={() => setSelectedFilm(film)}
+                className="film-card-item group relative cursor-pointer"
+                style={{
+                  backgroundColor: '#fff',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                  transition: 'transform 0.3s ease, filter 0.3s ease',
+                  flexShrink: 0
+                }}
+              >
                 <div
-                  key={`r1-${i}`}
-                  onClick={() => setSelectedFilm(film)}
-                  className="film-card"
-                  style={{
-                    width: "300px",
-                    padding: "20px",
-                    flexShrink: 0,
-                    cursor: "pointer",
-                    textDecoration: "none",
-                    position: "relative"
-                  }}
+                  className="w-full h-full bg-gray-200 overflow-hidden relative"
                 >
                   <div
-                    style={{
-                      width: "100%",
-                      aspectRatio: "2/3",
-                      borderRadius: "4px",
-                      marginBottom: "0",
-                      backgroundImage: `url('${film.poster}')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundColor: "#333",
-                      border: "1px solid #333"
-                    }}
+                    className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                    style={{ backgroundImage: `url('${film.poster}')` }}
                   />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="text-white font-bold tracking-widest text-lg uppercase">View</span>
+                  </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+
+            {/* PERFORATIONS BOTTOM */}
+            <div className="film-perforation film-perforation-bottom" />
           </div>
-        </section>
+        </div>
 
         {/* ROW 2: MOVES RIGHT */}
-        <section
-          style={{
-            padding: "40px 0 80px",
-            margin: 0,
-            overflow: "visible",
-          }}
+        <div
+          className="w-full overflow-hidden flex items-center justify-start"
         >
-          <div className="film-strip-row move-right" style={{ overflow: "hidden" }}>
-            <div
-              style={{
-                display: "flex",
-                width: "max-content",
-                animation: "moveRight 40s linear infinite",
-                columnGap: "0px",
-              }}
-            >
-              {filmsRow2.map((film, i) => (
+          <div
+            className="film-track flex relative items-center px-0 min-w-max hover:paused"
+            style={{
+              animation: 'moveFilmRollRight 60s linear infinite',
+            }}
+          >
+            {/* PERFORATIONS TOP */}
+            <div className="film-perforation film-perforation-top" />
+
+            {/* FILMS */}
+            {allFilms.map((film, i) => (
+              <div
+                key={`r2-film-${i}`}
+                onClick={() => setSelectedFilm(film)}
+                className="film-card-item group relative cursor-pointer"
+                style={{
+                  backgroundColor: '#fff',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                  transition: 'transform 0.3s ease, filter 0.3s ease',
+                  flexShrink: 0
+                }}
+              >
                 <div
-                  key={`r2-${i}`}
-                  onClick={() => setSelectedFilm(film)}
-                  className="film-card"
-                  style={{
-                    width: "300px",
-                    padding: "20px",
-                    flexShrink: 0,
-                    cursor: "pointer",
-                    textDecoration: "none",
-                    position: "relative"
-                  }}
+                  className="w-full h-full bg-gray-200 overflow-hidden relative"
                 >
                   <div
-                    style={{
-                      width: "100%",
-                      aspectRatio: "2/3",
-                      borderRadius: "4px",
-                      marginBottom: "0",
-                      backgroundImage: `url('${film.poster}')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundColor: "#333",
-                      border: "1px solid #333"
-                    }}
+                    className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                    style={{ backgroundImage: `url('${film.poster}')` }}
                   />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="text-white font-bold tracking-widest text-lg uppercase">View</span>
+                  </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+
+            {/* PERFORATIONS BOTTOM */}
+            <div className="film-perforation film-perforation-bottom" />
           </div>
-        </section>
+        </div>
+
       </div>
 
-      {/* MODAL OVERLAY */}
+      {/* MODAL OVERLAY (Kept largely the same but ensured z-index covers white bg) */}
       {selectedFilm && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
           <div className="relative w-full max-w-5xl bg-[#141414] rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-white/10">
@@ -365,7 +325,7 @@ export default function Films() {
               </div>
             </div>
 
-            {/* Close Button - Moved to end for Z-index stacking */}
+            {/* Close Button */}
             <button
               onClick={() => setSelectedFilm(null)}
               className="absolute top-4 right-4 z-[100] p-2 bg-black/50 hover:bg-black/80 text-white rounded-full transition-colors border border-white/10"
@@ -377,81 +337,85 @@ export default function Films() {
         </div>
       )}
 
-
       <style>{`
-        /* Film Strip Animation & Styling */
-        @keyframes moveLeft {
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+
+        .film-track {
+          box-sizing: border-box;
+          height: 380px;
+          min-height: 380px;
+          padding-top: 65px;
+          padding-bottom: 65px;
+          will-change: transform;
+          background-color: #1c1c1c;
+          border-top: 2px solid #555;
+          border-bottom: 2px solid #555;
+          box-shadow: 0 0 0 1px #000; /* Extra definition */
+        }
+        .film-card-item {
+          width: 200px;
+          height: 250px;
+          padding: 8px;
+          margin-right: 32px;
+          flex-shrink: 0;
+        }
+        .film-perforation {
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 30px;
+          background-image: linear-gradient(to right, #FFFFFF 50%, transparent 50%);
+          background-size: 40px 100%;
+          background-repeat: repeat-x;
+          opacity: 1;
+          z-index: 20;
+          pointer-events: none;
+        }
+        .film-perforation-top { top: 18px; }
+        .film-perforation-bottom { bottom: 18px; }
+
+        @media (max-width: 768px) {
+          .film-track {
+            height: 240px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            background-color: #1E1E1E;
+          }
+          .film-card-item {
+            width: 140px;
+            height: 180px;
+            padding: 6px;
+            margin-right: 16px;
+          }
+          .film-perforation {
+            height: 14px;
+            background-image: linear-gradient(90deg, #FFFFFF 8px, transparent 8px);
+            background-size: 16px 100%;
+          }
+          .film-perforation-top { top: 6px; }
+          .film-perforation-bottom { bottom: 6px; }
+        }
+
+        @keyframes moveFilmRoll {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        @keyframes moveRight {
+        @keyframes moveFilmRollRight {
           0% { transform: translateX(-50%); }
           100% { transform: translateX(0); }
         }
-
-        .film-strip-row {
-          position: relative;
-          background: #050505;
-          padding: 40px 0;
-          margin: 20px 0;
-          border-top: 2px solid #222;
-          border-bottom: 2px solid #222;
-          box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+        .hover\:paused:hover {
+          animation-play-state: paused !important;
         }
-
-        /* Film card styling */
-        .film-card {
-          position: relative;
-          background: #000;
-          border-left: 4px solid #111;
-          border-right: 4px solid #111;
-          margin: 0; /* Continuous strip */
-          transition: filter 0.3s ease;
-        }
-
-        /* Sprocket Holes - Top & Bottom */
-        .film-card::before,
-        .film-card::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: 25px;
-          background-image: radial-gradient(circle, #333 4px, transparent 5px);
-          background-size: 20px 100%; /* Spacing of holes */
-          background-position: center;
-          background-repeat: repeat-x;
-          z-index: 2;
-        }
-
-        .film-card::before {
-          top: 0;
-          border-bottom: 1px solid #222;
-        }
-
-        .film-card::after {
-          bottom: 0;
-          border-top: 1px solid #222;
-        }
-
-        /* Hover Effect: Highlight the frame */
-        .film-card:hover {
-          filter: brightness(1.3) contrast(1.1);
-          z-index: 10;
-        }
-
-        /* Glossy Shine Overlay */
-        .film-car-inner-shine {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            105deg,
-            transparent 20%,
-            rgba(255, 255, 255, 0.05) 25%,
-            transparent 30%
-          );
-          pointer-events: none;
-          z-index: 5;
+        /* Invert white logo to black for this white page */
+        .sm-logo-img {
+          /* filter: invert(1); - Removed for black background */
         }
       `}</style>
     </>
