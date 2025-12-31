@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from "react";
 import StaggeredMenu from "@/components/StaggeredMenu";
 import { X, Play, ArrowLeft, ArrowRight } from "lucide-react"; // Added ArrowLeft/Right for potential controls
 import { Button } from "@/components/ui/button";
+import UpcomingMovie from "@/components/UpcomingMovie";
+
 
 type Film = {
   title: string;
@@ -21,105 +23,19 @@ type Film = {
   director: string;
 };
 
-const row1: Film[] = [
-  {
-    title: "Inception",
-    desc: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-    poster: "https://via.placeholder.com/1080x1350",
-    banner: "https://images.unsplash.com/photo-1604871000636-074fa5117945?auto=format&fit=crop&q=80&w=2000",
-    color: "#F4EDE4",
-    year: "2010",
-    certificate: "UA",
-    duration: "2h 28m",
-    language: "English",
-    genre: "Sci-Fi | Action | Thriller",
-    tags: ["Mind-Bending", "Dream Heist", "Visual Masterpiece"],
-    link: "https://www.youtube.com/watch?v=YoHD9XEInc0",
-    director: "Christopher Nolan"
-  },
-  {
-    title: "Interstellar",
-    desc: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-    poster: "https://via.placeholder.com/1080x1350",
-    banner: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=2000",
-    color: "#E7F0F7",
-    year: "2014",
-    certificate: "UA",
-    duration: "2h 49m",
-    language: "English",
-    genre: "Sci-Fi | Drama | Adventure",
-    tags: ["Space Travel", "Emotional", "Time Dilation"],
-    link: "https://www.youtube.com/watch?v=zSWdZVtXT7E",
-    director: "Christopher Nolan"
-  },
-  {
-    title: "Whiplash",
-    desc: "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential.",
-    poster: "https://via.placeholder.com/1080x1350",
-    banner: "https://images.unsplash.com/photo-1519892300165-cb5542fb4747?auto=format&fit=crop&q=80&w=2000",
-    color: "#F7E7E7",
-    year: "2014",
-    certificate: "A",
-    duration: "1h 46m",
-    language: "English",
-    genre: "Drama | Music",
-    tags: ["Intensity", "Jazz", "Psychological"],
-    link: "https://www.youtube.com/watch?v=7d_jQycdQGo",
-    director: "Damien Chazelle"
-  },
-];
-
-const row2: Film[] = [
-  {
-    title: "Fight Club",
-    desc: "An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.",
-    poster: "https://via.placeholder.com/1080x1350",
-    banner: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&q=80&w=2000",
-    color: "#EDE7F7",
-    year: "1999",
-    certificate: "A",
-    duration: "2h 19m",
-    language: "English",
-    genre: "Drama",
-    tags: ["Cult Classic", "Psychological", "Dark"],
-    link: "https://www.youtube.com/watch?v=qtRKdVHc-cE",
-    director: "David Fincher"
-  },
-  {
-    title: "Blade Runner",
-    desc: "A blade runner must pursue and terminate four replicants who stole a ship in space, and have returned to Earth to find their creator.",
-    poster: "https://via.placeholder.com/1080x1350",
-    banner: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=2000",
-    color: "#E7F7EF",
-    year: "1982",
-    certificate: "UA",
-    duration: "1h 57m",
-    language: "English",
-    genre: "Sci-Fi | Thriller",
-    tags: ["Cyberpunk", "Dystopian", "Noir"],
-    link: "https://www.youtube.com/watch?v=eogpIG53Cis",
-    director: "Ridley Scott"
-  },
-  {
-    title: "Dune",
-    desc: "A noble family becomes embroiled in a war for control over the galaxy's most valuable asset while its heir becomes troubled by visions of a dark future.",
-    poster: "https://via.placeholder.com/1080x1350",
-    banner: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=2000",
-    color: "#F7F3E7",
-    year: "2021",
-    certificate: "UA",
-    duration: "2h 35m",
-    language: "English",
-    genre: "Action | Adventure | Drama",
-    tags: ["Epic", "Desert", "Space Opera"],
-    link: "https://www.youtube.com/watch?v=n9xhJrPXop4",
-    director: "Denis Villeneuve"
-  },
-];
+// Remove row1 and row2 constants
 
 export default function Films() {
   const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [filmsData, setFilmsData] = useState<{ row1: Film[]; row2: Film[] }>({ row1: [], row2: [] });
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/films')
+      .then(res => res.json())
+      .then(data => setFilmsData(data))
+      .catch(err => console.error("Failed to fetch films:", err));
+  }, []);
 
   const menuItems = [
     { label: "Home", ariaLabel: "Go to home page", link: "/" },
@@ -139,6 +55,8 @@ export default function Films() {
   ];
 
   // Combine rows for the single strip - duplicated 8x for safety on wide screens
+  // Use loaded data, fallback to empty array prevents errors during load
+  const { row1, row2 } = filmsData;
   const allFilms = [...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2, ...row1, ...row2];
 
   return (
@@ -175,8 +93,27 @@ export default function Films() {
 
       {/* PAGE CONTAINER */}
       <div
-        className="w-full h-screen bg-black flex flex-col items-start justify-center overflow-hidden relative gap-8 pt-24 md:gap-12 md:pt-32"
+        className="w-full min-h-screen bg-black flex flex-col items-start justify-start overflow-x-hidden relative gap-8 pt-24 md:gap-12 md:pt-32 pb-20"
       >
+        {/* UPCOMING MOVIE TITLE */}
+        <div className="w-full px-4 md:px-8">
+          <h2 className="text-white text-3xl md:text-5xl font-black uppercase tracking-tighter text-center">
+            Upcoming Projects
+          </h2>
+        </div>
+
+        {/* UPCOMING MOVIE SECTION */}
+        <div className="w-full flex justify-center shrink-0 scale-90 md:scale-100 z-10 mb-4">
+          <UpcomingMovie />
+        </div>
+
+
+        {/* NOW SHOWING TITLE */}
+        <div className="w-full px-4 md:px-8 mt-4">
+          <h2 className="text-white text-3xl md:text-5xl font-black uppercase tracking-tighter text-center">
+            Now Showing
+          </h2>
+        </div>
 
         {/* ROW 1: MOVES LEFT */}
         <div
@@ -294,14 +231,13 @@ export default function Films() {
                   {selectedFilm.title}
                 </h2>
 
-                {/* Metadata */}
-                <div className="flex flex-wrap gap-x-4 gap-y-2 text-gray-400 text-sm md:text-base font-medium">
-                  <span className="text-white">{selectedFilm.year}</span>
-                  <span>•</span>
-                  <span>{selectedFilm.duration}</span>
-                  <span>•</span>
-                  <span>{selectedFilm.language}</span>
+                <div className="text-gray-400 text-lg md:text-xl font-medium">
+                  <span className="text-gray-500 uppercase text-sm tracking-wider mr-2">Director :</span>
+                  {selectedFilm.director}
                 </div>
+
+                {/* Metadata */}
+
 
                 {/* Action Buttons */}
                 <div className="w-full flex items-center gap-4">
@@ -319,9 +255,7 @@ export default function Films() {
                   {selectedFilm.desc}
                 </p>
 
-                <div className="flex flex-wrap gap-2 text-xs text-gray-500 uppercase tracking-widest">
-                  {selectedFilm.genre}
-                </div>
+
               </div>
             </div>
 

@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "server": "node server/server.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -60,6 +61,7 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.462.0",
     "meshline": "^3.3.1",
+    "multer": "^2.0.2",
     "next-themes": "^0.3.0",
     "ogl": "^1.0.11",
     "react": "^18.3.1",

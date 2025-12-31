@@ -1,10 +1,28 @@
 
+import { useState, useEffect } from 'react';
 import StaggeredMenu from "@/components/StaggeredMenu";
 import LightRaysBackground from "@/components/LightRaysBackground";
 import Masonry from "@/components/Masonry"; // Newly added component
 
 
 const Gallery = () => {
+    const [galleryItems, setGalleryItems] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/gallery')
+            .then(res => res.json())
+            .then(data => {
+                // Add IDs and URLs to the data
+                const itemsWithIds = data.map((item: any, index: number) => ({
+                    ...item,
+                    id: String(index + 1),
+                    url: "#",
+                }));
+                setGalleryItems(itemsWithIds);
+            })
+            .catch(err => console.error("Error loading gallery:", err));
+    }, []);
+
     const menuItems = [
         { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
         { label: 'Globus', ariaLabel: 'Globus', link: '/globus' },
@@ -58,7 +76,7 @@ const Gallery = () => {
 
                 <div className="w-full h-full px-2 md:px-0">
                     <Masonry
-                        items={items}
+                        items={galleryItems}
                         ease="power3.out"
                         duration={0.6}
                         stagger={0.05}
@@ -72,36 +90,5 @@ const Gallery = () => {
         </div>
     );
 };
-
-// Mock data adapted for the new Masonry component
-const baseData = [
-    { img: "/Events/Shortfilm.webp", height: 900 },
-    { img: "/Events/MeesayaMurukku.webp", height: 1100 },
-    { img: "/Events/Retrograde.webp", height: 800 },
-    { img: "/Gallery/Curtain1.webp", height: 1000 },
-    { img: "/Gallery/Screening1.webp", height: 900 },
-    { img: "/Gallery/Screening2.webp", height: 850 },
-    { img: "/Gallery/Screening3.webp", height: 950 },
-    { img: "/Gallery/Screening4.webp", height: 700 },
-    { img: "/Gallery/workshop1.webp", height: 900 },
-    { img: "/Gallery/workshop2.webp", height: 900 },
-    { img: "/Gallery/Expo1.webp", height: 900 },
-    { img: "/Gallery/Expo2.webp", height: 900 },
-    { img: "/Gallery/Expo3.webp", height: 900 },
-    { img: "/Gallery/CIneShark1.webp", height: 900 },
-    { img: "/Gallery/Cineshark2.webp", height: 1100 },
-    { img: "/Gallery/Ework1.webp", height: 1200 },
-];
-
-const items = [
-    ...baseData,
-    ...baseData,
-    ...baseData,
-    ...baseData
-].map((item, index) => ({
-    ...item,
-    id: String(index + 1),
-    url: "#", // Placeholder link
-}));
 
 export default Gallery;

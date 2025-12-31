@@ -1,95 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StaggeredMenu from "@/components/StaggeredMenu";
 import MagicBento from "@/components/MagicBento";
 import { X } from "lucide-react";
 
+// import eventsData from "@/data/events.json";
+
 type EventItem = {
+    id: string;
     title: string;
-    desc: string;
+    description: string;
     poster: string;
     color: string;
+    galleryImages?: string[];
+    date?: string;
+    participants?: string;
+    row?: string;
 };
 
-const eventItems: EventItem[] = [
-    {
-        title: "Event 1",
-        desc: "Alumni Meet",
-        poster: "/Events 2k25-26/Alumni Meet.png",
-        color: "#F4EDE4",
-    },
-    {
-        title: "Event 2",
-        desc: "Camera Handling Workshop",
-        poster: "/Events 2k25-26/Camera Handling Workshop .jpg",
-        color: "#E7F0F7",
-    },
-    {
-        title: "Event 3",
-        desc: "Cineshark",
-        poster: "/Events 2k25-26/Cineshark .jpg",
-        color: "#F7E7E7",
-    },
-    {
-        title: "Event 4",
-        desc: "Cineshot Memes",
-        poster: "/Events 2k25-26/Cineshot Memes (1).jpg",
-        color: "#F4EDE4", // Cycle colors or random
-    },
-    {
-        title: "Event 5",
-        desc: "Cineverse",
-        poster: "/Events 2k25-26/Cineverse (1).jpg",
-        color: "#E7F0F7",
-    },
-    {
-        title: "Event 6",
-        desc: "Colour Grading Workshop",
-        poster: "/Events 2k25-26/Colour Grading Workshop  (2).jpg",
-        color: "#F7E7E7",
-    },
-    {
-        title: "Event 7",
-        desc: "How to make a Shortfilm",
-        poster: "/Events 2k25-26/How to make a Shortfilm as a Student.png",
-        color: "#F4EDE4",
-    },
-    {
-        title: "Event 8",
-        desc: "Meesaya murukku",
-        poster: "/Events 2k25-26/Meesaya murukku.png",
-        color: "#E7F0F7",
-    },
-    {
-        title: "Event 9",
-        desc: "Poster reimagined",
-        poster: "/Events 2k25-26/Poster reimagined.png",
-        color: "#F7E7E7",
-    },
-    {
-        title: "Event 10",
-        desc: "Retrograde",
-        poster: "/Events 2k25-26/Retrograde.png",
-        color: "#F4EDE4",
-    },
-    {
-        title: "Event 11",
-        desc: "Video Editing Workshop",
-        poster: "/Events 2k25-26/Video Editing Workshop .jpg",
-        color: "#E7F0F7",
-    },
-    {
-        title: "Event 12",
-        desc: "Curtain Raiser",
-        poster: "/Events 2k25-26/curtain raiser.jpeg",
-        color: "#F7E7E7",
-    },
-];
+// const eventItems: EventItem[] = eventsData;
 
 export default function Events25_26() {
     const [showBento, setShowBento] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+    const [eventItems, setEventItems] = useState<EventItem[]>([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/api/events')
+            .then(res => res.json())
+            .then(data => setEventItems(data))
+            .catch(err => console.error("Failed to fetch events:", err));
+    }, []);
 
     const menuItems = [
         { label: "Home", ariaLabel: "Go to home page", link: "/" },
@@ -108,9 +50,9 @@ export default function Events25_26() {
         { label: "YouTube", link: "http://www.youtube.com/@VITSIONMovieMakers" },
     ];
 
-    // Split events into two rows, 6 each
-    const firstHalf = eventItems.slice(0, 6);
-    const secondHalf = eventItems.slice(6, 12);
+    // Filter events based on 'row' property
+    const firstHalf = eventItems.filter(item => !item.row || item.row === '1');
+    const secondHalf = eventItems.filter(item => item.row === '2');
 
     // Duplicate for infinite scroll smoothness
     const eventsRow1 = [...firstHalf, ...firstHalf, ...firstHalf, ...firstHalf];
@@ -148,6 +90,13 @@ export default function Events25_26() {
                         glowColor="132, 0, 255"
                         // @ts-ignore
                         teamworkImage={selectedEvent?.poster}
+                        galleryImages={selectedEvent?.galleryImages}
+                        title={selectedEvent?.title}
+                        description={selectedEvent?.description}
+                        // @ts-ignore
+                        date={selectedEvent?.date}
+                        // @ts-ignore
+                        participants={selectedEvent?.participants}
                     />
                 </div>
             </div>
@@ -290,7 +239,7 @@ export default function Events25_26() {
                                             overflow: "hidden"
                                         }}
                                     >
-                                        {item.desc}
+                                        {item.description}
                                     </p>
                                 </div>
                             ))}
@@ -371,7 +320,7 @@ export default function Events25_26() {
                                             overflow: "hidden"
                                         }}
                                     >
-                                        {item.desc}
+                                        {item.description}
                                     </p>
                                 </div>
                             ))}

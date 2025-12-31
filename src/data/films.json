@@ -1,0 +1,120 @@
+{
+  "row1": [
+    {
+      "title": "Inception",
+      "desc": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+      "poster": "https://via.placeholder.com/1080x1350",
+      "banner": "https://images.unsplash.com/photo-1604871000636-074fa5117945?auto=format&fit=crop&q=80&w=2000",
+      "color": "#F4EDE4",
+      "year": "2010",
+      "certificate": "UA",
+      "duration": "2h 28m",
+      "language": "English",
+      "genre": "Sci-Fi | Action | Thriller",
+      "tags": [
+        "Mind-Bending",
+        "Dream Heist",
+        "Visual Masterpiece"
+      ],
+      "link": "https://www.youtube.com/watch?v=YoHD9XEInc0",
+      "director": "Christopher Nolan"
+    },
+    {
+      "title": "Interstellar",
+      "desc": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+      "poster": "https://via.placeholder.com/1080x1350",
+      "banner": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=2000",
+      "color": "#E7F0F7",
+      "year": "2014",
+      "certificate": "UA",
+      "duration": "2h 49m",
+      "language": "English",
+      "genre": "Sci-Fi | Drama | Adventure",
+      "tags": [
+        "Space Travel",
+        "Emotional",
+        "Time Dilation"
+      ],
+      "link": "https://www.youtube.com/watch?v=zSWdZVtXT7E",
+      "director": "Christopher Nolan"
+    },
+    {
+      "title": "Whiplash",
+      "desc": "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor who will stop at nothing to realize a student's potential.",
+      "poster": "https://via.placeholder.com/1080x1350",
+      "banner": "https://images.unsplash.com/photo-1519892300165-cb5542fb4747?auto=format&fit=crop&q=80&w=2000",
+      "color": "#F7E7E7",
+      "year": "2014",
+      "certificate": "A",
+      "duration": "1h 46m",
+      "language": "English",
+      "genre": "Drama | Music",
+      "tags": [
+        "Intensity",
+        "Jazz",
+        "Psychological"
+      ],
+      "link": "https://www.youtube.com/watch?v=7d_jQycdQGo",
+      "director": "Damien Chazelle"
+    }
+  ],
+  "row2": [
+    {
+      "title": "Fight Club",
+      "desc": "An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.",
+      "poster": "https://via.placeholder.com/1080x1350",
+      "banner": "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&q=80&w=2000",
+      "color": "#EDE7F7",
+      "year": "1999",
+      "certificate": "A",
+      "duration": "2h 19m",
+      "language": "English",
+      "genre": "Drama",
+      "tags": [
+        "Cult Classic",
+        "Psychological",
+        "Dark"
+      ],
+      "link": "https://www.youtube.com/watch?v=qtRKdVHc-cE",
+      "director": "David Fincher"
+    },
+    {
+      "title": "Blade Runner",
+      "desc": "A blade runner must pursue and terminate four replicants who stole a ship in space, and have returned to Earth to find their creator.",
+      "poster": "https://via.placeholder.com/1080x1350",
+      "banner": "https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=2000",
+      "color": "#E7F7EF",
+      "year": "1982",
+      "certificate": "UA",
+      "duration": "1h 57m",
+      "language": "English",
+      "genre": "Sci-Fi | Thriller",
+      "tags": [
+        "Cyberpunk",
+        "Dystopian",
+        "Noir"
+      ],
+      "link": "https://www.youtube.com/watch?v=eogpIG53Cis",
+      "director": "Ridley Scott"
+    },
+    {
+      "title": "Dune",
+      "desc": "A noble family becomes embroiled in a war for control over the galaxy's most valuable asset while its heir becomes troubled by visions of a dark future.",
+      "poster": "https://via.placeholder.com/1080x1350",
+      "banner": "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=2000",
+      "color": "#F7F3E7",
+      "year": "2021",
+      "certificate": "UA",
+      "duration": "2h 35m",
+      "language": "English",
+      "genre": "Action | Adventure | Drama",
+      "tags": [
+        "Epic",
+        "Desert",
+        "Space Opera"
+      ],
+      "link": "https://www.youtube.com/watch?v=n9xhJrPXop4",
+      "director": "Denis Villeneuve"
+    }
+  ]
+}

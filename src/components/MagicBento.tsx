@@ -11,15 +11,15 @@ const MOBILE_BREAKPOINT = 768;
 const cardData = [
     {
         color: '#060010',
-        title: 'Analytics',
+        title: 'Title',
         description: 'Track user behavior',
-        label: 'Insights'
+        label: 'Title'
     },
     {
         color: '#060010',
-        title: 'Dashboard',
+        title: 'Date and Participants',
         description: 'Centralized data view',
-        label: 'Overview'
+        label: 'Date & Participants'
     },
     {
         color: '#060010',
@@ -35,9 +35,9 @@ const cardData = [
     },
     {
         color: '#060010',
-        title: 'Automation',
+        title: 'Description',
         description: 'Streamline workflows',
-        label: 'Efficiency'
+        label: 'Description'
     },
     {
         color: '#060010',
@@ -490,7 +490,12 @@ const MagicBento = ({
     glowColor = DEFAULT_GLOW_COLOR,
     clickEffect = true,
     enableMagnetism = true,
-    teamworkImage = null // Add this prop
+    teamworkImage = null,
+    galleryImages = [],
+    title = "",
+    description = "",
+    date = "",
+    participants = ""
 }) => {
     const gridRef = useRef(null);
     const isMobile = useMobileDetection();
@@ -519,26 +524,81 @@ const MagicBento = ({
                         }
                     };
 
+                    // Ensure galleryImages is always an array
+                    const safeGalleryImages = Array.isArray(galleryImages) ? galleryImages : [];
+
+                    // Map gallery images to specific 'filler' slots
+                    // Moved Index 1 (next to title) to Index 6 (Protection/Bottom Right) per user request
+                    let galleryImage = null;
+                    if (index === 6 && safeGalleryImages[0]) galleryImage = safeGalleryImages[0];
+                    if (index === 3 && safeGalleryImages[1]) galleryImage = safeGalleryImages[1];
+                    if (index === 5 && safeGalleryImages[2]) galleryImage = safeGalleryImages[2];
+
                     const isTeamworkCard = card.title === 'Event Display';
-                    const content = isTeamworkCard && teamworkImage ? (
-                        <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
-                            <img
-                                src={teamworkImage}
-                                alt="Event Poster"
-                                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                            />
-                        </div>
-                    ) : (
-                        <>
-                            <div className="magic-bento-card__header">
-                                <div className="magic-bento-card__label">{card.label}</div>
+
+                    let content;
+
+                    if (isTeamworkCard && teamworkImage) {
+                        content = (
+                            <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+                                <img
+                                    src={teamworkImage}
+                                    alt="Event Poster"
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                />
                             </div>
-                            <div className="magic-bento-card__content">
-                                <h2 className="magic-bento-card__title">{card.title}</h2>
-                                <p className="magic-bento-card__description">{card.description}</p>
+                        );
+                    } else if (galleryImage) {
+                        // Render Gallery Image
+                        content = (
+                            <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+                                <img
+                                    src={galleryImage}
+                                    alt="Gallery"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
                             </div>
-                        </>
-                    );
+                        );
+                    } else {
+                        // Dynamic Content Overrides
+                        let displayTitle = card.title;
+                        let displayDesc = card.description;
+                        let customHeader = null;
+
+                        if (index === 0 && title) {
+                            displayTitle = title;
+                            displayDesc = ""; // Hide default desc if title is overridden
+                        }
+                        if (index === 1) {
+                            if (date || participants) {
+                                // User Request: Date in Yellow region (Header) with bigger font
+                                customHeader = (
+                                    <div className="magic-bento-card__label" style={{ fontSize: '1.8rem', fontWeight: '700', lineHeight: '1.1', color: '#fff' }}>
+                                        {date || "Date N/A"}
+                                    </div>
+                                );
+                                // Participants in Blue region (Body)
+                                displayTitle = participants ? `${participants} Participants` : "Participants N/A";
+                                displayDesc = "";
+                            }
+                        }
+                        if (index === 4 && description) {
+                            displayTitle = "About"; // Or keep generic? Let's use "About" or just hide title
+                            displayDesc = description;
+                        }
+
+                        content = (
+                            <>
+                                <div className="magic-bento-card__header">
+                                    {customHeader ? customHeader : <div className="magic-bento-card__label">{card.label}</div>}
+                                </div>
+                                <div className="magic-bento-card__content">
+                                    <h2 className="magic-bento-card__title">{displayTitle}</h2>
+                                    <p className="magic-bento-card__description">{displayDesc}</p>
+                                </div>
+                            </>
+                        );
+                    }
 
                     if (enableStars) {
                         return (

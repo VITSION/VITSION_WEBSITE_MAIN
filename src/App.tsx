@@ -13,6 +13,7 @@ import Events25_26 from "./pages/Events/Events25-26";
 
 import Films from "./pages/Films";
 import Contact from "./pages/Contact";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/team" element={<Team />} />
 
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<Admin />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes >

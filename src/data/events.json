@@ -1,0 +1,168 @@
+[
+  {
+    "id": "1",
+    "title": "Alumni Meet",
+    "description": "Connecting the past with the present.",
+    "poster": "/Events 2k25-26/Alumni Meet.png",
+    "color": "#F4EDE4",
+    "galleryImages": [
+      "/Events 2k25-26/Event 1- Alumni/WhatsApp Image 2025-12-12 at 19.27.27 (1).jpeg"
+    ],
+    "date": "2025-12-12",
+    "participants": "17",
+    "row": "1"
+  },
+  {
+    "id": "2",
+    "title": "Camera Handling Workshop",
+    "description": "Mastering the art of capturing moments.",
+    "poster": "/Events 2k25-26/Camera Handling Workshop .jpg",
+    "color": "#E7F0F7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 2 - Camera Handling/20251102_103856.jpg",
+      "/Events 2k25-26/Event 2 - Camera Handling/20251102_110632.jpg",
+      "/Events 2k25-26/Event 2 - Camera Handling/20251102_114959.jpg"
+    ],
+    "row": "1"
+  },
+  {
+    "id": "3",
+    "title": "Cineshark",
+    "description": "Dive into the depths of cinema.",
+    "poster": "/Events 2k25-26/Cineshark .jpg",
+    "color": "#F7E7E7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 3 - Cineshark/IMG_0042.JPG",
+      "/Events 2k25-26/Event 3 - Cineshark/IMG_0056.JPG",
+      "/Events 2k25-26/Event 3 - Cineshark/IMG_0109.JPG"
+    ],
+    "row": "1"
+  },
+  {
+    "id": "4",
+    "title": "Cineshot Memes",
+    "description": "Where humor meets creativity.",
+    "poster": "/Events 2k25-26/Cineshot Memes (1).jpg",
+    "color": "#F4EDE4",
+    "galleryImages": [
+      "/Events 2k25-26/Event 4 - Cineshot/Jamie Chastain.png"
+    ],
+    "row": "1"
+  },
+  {
+    "id": "5",
+    "title": "Cineverse",
+    "description": "Exploring the universe of films.",
+    "poster": "/Events 2k25-26/Cineverse (1).jpg",
+    "color": "#E7F0F7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 5 - Cineverse/WhatsApp Image 2025-12-13 at 20.20.59 (1).jpeg",
+      "/Events 2k25-26/Event 5 - Cineverse/WhatsApp Image 2025-12-13 at 20.20.59.jpeg",
+      "/Events 2k25-26/Event 5 - Cineverse/WhatsApp Image 2025-12-13 at 20.21.29.jpeg"
+    ],
+    "row": "1"
+  },
+  {
+    "id": "6",
+    "title": "Colour Grading Workshop",
+    "description": "Painting emotions with valid colors.",
+    "poster": "/Events 2k25-26/Colour Grading Workshop  (2).jpg",
+    "color": "#F7E7E7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 6 - Colour Grading/WhatsApp Image 2025-10-28 at 20.46.51.jpeg",
+      "/Events 2k25-26/Event 6 - Colour Grading/WhatsApp Image 2025-10-28 at 20.46.52.jpeg",
+      "/Events 2k25-26/Event 6 - Colour Grading/WhatsApp Image 2025-10-28 at 20.46.53.jpeg"
+    ],
+    "row": "1"
+  },
+  {
+    "id": "7",
+    "title": "How to make a Shortfilm",
+    "description": "A guide for aspiring filmmakers.",
+    "poster": "/Events 2k25-26/How to make a Shortfilm as a Student.png",
+    "color": "#F4EDE4",
+    "galleryImages": [
+      "/Events 2k25-26/Event 7 - How to make a Shortfilm/20250903_121217.jpg",
+      "/Events 2k25-26/Event 7 - How to make a Shortfilm/20250903_122022.jpg",
+      "/Events 2k25-26/Event 7 - How to make a Shortfilm/20250903_125556.jpg"
+    ],
+    "row": "2"
+  },
+  {
+    "id": "8",
+    "title": "Meesaya Murukku",
+    "description": "Celebrating the spirit of independence.",
+    "poster": "/Events 2k25-26/Meesaya murukku.png",
+    "color": "#E7F0F7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 8 - Meesaya Muruku/20250826_142222.jpg",
+      "/Events 2k25-26/Event 8 - Meesaya Muruku/20250826_142734.jpg",
+      "/Events 2k25-26/Event 8 - Meesaya Muruku/IMG_7864.jpeg"
+    ],
+    "row": "2"
+  },
+  {
+    "id": "9",
+    "title": "Poster Reimagined",
+    "description": "Redefining visual storytelling.",
+    "poster": "/Events 2k25-26/Poster reimagined.png",
+    "color": "#F7E7E7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 9 - Poster Reimagined/2.png",
+      "/Events 2k25-26/Event 9 - Poster Reimagined/3.png",
+      "/Events 2k25-26/Event 9 - Poster Reimagined/4.png"
+    ],
+    "row": "2"
+  },
+  {
+    "id": "10",
+    "title": "Retrograde",
+    "description": "A blast from the past.",
+    "poster": "/Events 2k25-26/Retrograde.png",
+    "color": "#F4EDE4",
+    "galleryImages": [
+      "/Events 2k25-26/Event 10 - Retrograde/08158c6f-4712-4ff8-85eb-4d57572286de.jpg",
+      "/Events 2k25-26/Event 10 - Retrograde/1273640d-d2cf-4592-86d8-a846951d0331.jpg",
+      "/Events 2k25-26/Event 10 - Retrograde/3e4c8f79-5fe9-42eb-9562-28d6248b3a20.jpg"
+    ],
+    "row": "2"
+  },
+  {
+    "id": "11",
+    "title": "Video Editing Workshop",
+    "description": "Crafting stories frame by frame.",
+    "poster": "/Events 2k25-26/Video Editing Workshop .jpg",
+    "color": "#E7F0F7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 11 - Editing Work/IMG_20251101_105401.jpg",
+      "/Events 2k25-26/Event 11 - Editing Work/IMG_20251101_111930.jpg",
+      "/Events 2k25-26/Event 11 - Editing Work/IMG_20251101_114030.jpg"
+    ],
+    "row": "2"
+  },
+  {
+    "id": "12",
+    "title": "Curtain Raiser",
+    "description": "Unveiling the magic.",
+    "poster": "/Events 2k25-26/curtain raiser.jpeg",
+    "color": "#F7E7E7",
+    "galleryImages": [
+      "/Events 2k25-26/Event 12 - Curtain Raiser/IMG_20250730_121803649.jpg",
+      "/Events 2k25-26/Event 12 - Curtain Raiser/IMG_20250730_121842167.jpg"
+    ],
+    "row": "2"
+  },
+  {
+    "id": "13",
+    "title": "Cineshark 2.0",
+    "description": "The sequel to the saga.",
+    "poster": "/Events 2k25-26/Cineshark 2.0.jpeg",
+    "color": "#F4EDE4",
+    "galleryImages": [
+      "/Events 2k25-26/Event 13 - Cineshark 2.0/IMG_5235.jpeg",
+      "/Events 2k25-26/Event 13 - Cineshark 2.0/IMG_5307.jpeg",
+      "/Events 2k25-26/Event 13 - Cineshark 2.0/IMG_5362.jpeg"
+    ],
+    "row": "2"
+  }
+]

@@ -2,21 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const images = [
-    "/film1.webp",
-    "/film2.png"
-];
+// const images = [ ... ] removed
 
 const UpcomingMovie = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [images, setImages] = useState<string[]>([]);
 
     useEffect(() => {
+        fetch('http://localhost:5000/api/home')
+            .then(res => res.json())
+            .then(data => {
+                if (data.upcomingMovie && data.upcomingMovie.images) {
+                    setImages(data.upcomingMovie.images);
+                }
+            })
+            .catch(err => console.error("Failed to fetch home data:", err));
+    }, []);
+
+    useEffect(() => {
+        if (images.length === 0) return;
+
         const interval = setInterval(() => {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
         }, 10000); // Change every 10 seconds
 
         return () => clearInterval(interval);
-    }, []);
+    }, [images.length]);
+
+    if (images.length === 0) return null; // Or a loading spinner
 
     return (
         <div className="w-full flex justify-center my-12 px-4">

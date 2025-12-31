@@ -1,0 +1,736 @@
+import React, { useState, useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import MagicBento from "@/components/MagicBento";
+import { X, Upload, Trash, ArrowLeft } from "lucide-react";
+
+const Admin = () => {
+    const [activeTab, setActiveTab] = useState('home');
+
+    // --- HOME STATE ---
+    const [homeData, setHomeData] = useState({
+        upcomingMovie: { images: [] as string[] },
+        eventAnnouncement: {
+            title: "",
+            description: "",
+            buttonText: "",
+            buttonLink: "",
+            backgroundImage: ""
+        }
+    });
+
+    // --- EVENTS STATE ---
+    const [events, setEvents] = useState<any[]>([]);
+    const [editingEvent, setEditingEvent] = useState<any>(null);
+
+    // --- FILMS STATE ---
+    const [filmsData, setFilmsData] = useState<{ row1: any[]; row2: any[] }>({ row1: [], row2: [] });
+    const [editingFilm, setEditingFilm] = useState<any>(null);
+    const [editingFilmRow, setEditingFilmRow] = useState<string>('row1');
+
+    // --- CONTACT STATE ---
+    const [contactMessages, setContactMessages] = useState<any[]>([]);
+
+    // --- GALLERY STATE ---
+    const [galleryData, setGalleryData] = useState<any[]>([]);
+
+    // --- EFFECTS ---
+    useEffect(() => {
+        if (activeTab === 'home') {
+            fetch('http://localhost:5000/api/home')
+                .then(res => res.json())
+                .then(data => setHomeData(data))
+                .catch(err => console.error("Error loading home:", err));
+        } else if (activeTab === 'events') {
+            fetch('http://localhost:5000/api/events')
+                .then(res => res.json())
+                .then(data => setEvents(data))
+                .catch(err => console.error("Error loading events:", err));
+        } else if (activeTab === 'films') {
+            fetch('http://localhost:5000/api/films')
+                .then(res => res.json())
+                .then(data => setFilmsData(data))
+                .catch(err => console.error("Error loading films:", err));
+        } else if (activeTab === 'contact') {
+            fetch('http://localhost:5000/api/contact')
+                .then(res => res.json())
+                .then(data => setContactMessages(data))
+                .catch(err => console.error("Error loading messages:", err));
+        } else if (activeTab === 'gallery') {
+            fetch('http://localhost:5000/api/gallery')
+                .then(res => res.json())
+                .then(data => setGalleryData(data))
+                .catch(err => console.error("Error loading gallery:", err));
+        }
+    }, [activeTab]);
+
+    // --- UPLOAD HANDLER ---
+    const uploadFile = async (file: File) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch('http://localhost:5000/api/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        return data.url;
+    };
+
+    // --- HOME HANDLERS ---
+    const handleHomeImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldPath: string) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            const url = await uploadFile(file);
+            if (fieldPath === 'eventAnnouncement.backgroundImage') {
+                setHomeData(prev => ({ ...prev, eventAnnouncement: { ...prev.eventAnnouncement, backgroundImage: url } }));
+            } else if (fieldPath === 'upcomingMovie.image1') {
+                const newImages = [...homeData.upcomingMovie.images];
+                newImages[0] = url;
+                setHomeData(prev => ({ ...prev, upcomingMovie: { ...prev.upcomingMovie, images: newImages } }));
+            } else if (fieldPath === 'upcomingMovie.image2') {
+                const newImages = [...homeData.upcomingMovie.images];
+                newImages[1] = url;
+                setHomeData(prev => ({ ...prev, upcomingMovie: { ...prev.upcomingMovie, images: newImages } }));
+            }
+        } catch (err) { console.error(err); alert("Upload failed"); }
+    };
+
+    const handleHomeSave = async () => {
+        await fetch('http://localhost:5000/api/home', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(homeData)
+        });
+        alert("Home saved!");
+    };
+
+    // --- EVENTS HANDLERS ---
+    const handleEventImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string, index?: number) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            const url = await uploadFile(file);
+            if (field === 'poster') {
+                setEditingEvent((prev: any) => ({ ...prev, poster: url }));
+            } else if (field === 'gallery' && typeof index === 'number') {
+                setEditingEvent((prev: any) => {
+                    const newGallery = [...(prev.galleryImages || ['', '', ''])];
+                    newGallery[index] = url;
+                    return { ...prev, galleryImages: newGallery };
+                });
+            }
+        } catch (err) { console.error(err); }
+    };
+
+    const handleEventSave = async () => {
+        if (!editingEvent) return;
+        let updatedEvents;
+        if (editingEvent.id && events.find(e => e.id === editingEvent.id)) {
+            updatedEvents = events.map(e => e.id === editingEvent.id ? editingEvent : e);
+        } else {
+            const newId = (Math.max(...events.map(e => parseInt(e.id) || 0), 0) + 1).toString();
+            updatedEvents = [...events, { ...editingEvent, id: newId }];
+        }
+        setEvents(updatedEvents);
+        setEditingEvent(null);
+        await fetch('http://localhost:5000/api/events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedEvents)
+        });
+    };
+
+    // --- FILMS HANDLERS ---
+    const handleFilmImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            const url = await uploadFile(file);
+            if (field === 'poster') {
+                setEditingFilm((prev: any) => ({ ...prev, poster: url }));
+            }
+        } catch (err) { console.error(err); }
+    };
+
+    const handleFilmSave = async () => {
+        if (!editingFilm) return;
+
+        const newFilmsData = { ...filmsData };
+        // Remove from current row if exists (for move logic or update) - Simplified: just replace in target row
+        // Ideally we check if ID exists in either row. For now assuming films are unique objects.
+        // Let's rely on reference or create a temp ID.
+        // Actually, let's just update the target row array.
+
+        // Remove from old location if moving (complex, skip for now, just Add/Update in target row)
+        // If editing, find index in target row.
+        const targetRowList = editingFilmRow === 'row1' ? [...newFilmsData.row1] : [...newFilmsData.row2];
+        const existingIndex = targetRowList.findIndex(f => f.title === editingFilm.title); // using title as ID for now as films don't have IDs in original data
+
+        if (existingIndex >= 0) {
+            targetRowList[existingIndex] = editingFilm;
+        } else {
+            targetRowList.push(editingFilm);
+        }
+
+        if (editingFilmRow === 'row1') newFilmsData.row1 = targetRowList;
+        else newFilmsData.row2 = targetRowList;
+
+        setFilmsData(newFilmsData);
+        setEditingFilm(null);
+
+        await fetch('http://localhost:5000/api/films', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newFilmsData)
+        });
+    };
+
+    const handleFilmDelete = async (film: any, rowName: 'row1' | 'row2') => {
+        if (!window.confirm("Delete film?")) return;
+        const newFilmsData = { ...filmsData };
+        newFilmsData[rowName] = newFilmsData[rowName].filter(f => f.title !== film.title);
+        setFilmsData(newFilmsData);
+        await fetch('http://localhost:5000/api/films', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newFilmsData)
+        });
+    };
+
+    // --- CONTACT HANDLERS ---
+    const handleDeleteMessage = async (id: number) => {
+        if (!window.confirm("Delete this message?")) return;
+        try {
+            const res = await fetch(`http://localhost:5000/api/contact/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setContactMessages(prev => prev.filter(msg => msg.id !== id));
+            } else {
+                alert("Failed to delete message");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error deleting message");
+        }
+    };
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        setUsername("");
+        setPassword("");
+    };
+
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (username === "vitsion_2025" && password === "pepperspray") {
+            setIsAuthenticated(true);
+        } else {
+            alert("Incorrect Username or Password");
+        }
+    };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center text-white">
+                <form onSubmit={handleLogin} className="bg-[#111] p-8 rounded-2xl border border-white/10 w-full max-w-sm space-y-6">
+                    <h1 className="text-2xl font-bold text-center text-[#d1ab2e]">Admin Access</h1>
+                    <div className="space-y-2">
+                        <label className="text-gray-400 text-sm">Username</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="w-full bg-black/50 border border-white/10 rounded p-3 text-white focus:border-[#d1ab2e] outline-none transition-colors"
+                            placeholder="Username"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-gray-400 text-sm">Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full bg-black/50 border border-white/10 rounded p-3 text-white focus:border-[#d1ab2e] outline-none transition-colors"
+                            placeholder="••••••••"
+                        />
+                    </div>
+                    <Button type="submit" className="w-full bg-[#d1ab2e] text-black hover:bg-[#e2bd44] font-bold py-6">
+                        LOGIN
+                    </Button>
+                </form>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-black text-white p-8 pt-24">
+            {/* Back/Logout Button */}
+            <button
+                onClick={handleLogout}
+                className="fixed top-8 left-8 flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors z-50"
+            >
+                <ArrowLeft size={20} />
+                <span>Logout</span>
+            </button>
+            <h1 className="text-4xl font-bold mb-8 text-center uppercase tracking-widest text-[#d1ab2e]">Admin Dashboard</h1>
+
+            {/* Tabs */}
+            <div className="flex justify-center gap-4 mb-12">
+                {['home', 'events', 'films', 'gallery', 'contact'].map((tab) => (
+                    <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-6 py-2 rounded-full uppercase font-bold tracking-wider transition-all duration-300 ${activeTab === tab ? 'bg-white text-black' : 'bg-white/10 text-gray-400 hover:bg-white/20'}`}
+                    >
+                        {tab}
+                    </button>
+                ))}
+            </div>
+
+            <div className="max-w-6xl mx-auto bg-[#111] p-8 rounded-2xl border border-white/10">
+                {/* --- HOME TAB --- */}
+                {activeTab === 'home' && (
+                    <div className="space-y-8">
+                        <div>
+                            <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                                <h2 className="text-2xl font-bold">Upcoming Events Section</h2>
+                            </div>
+
+                            <div className="space-y-6">
+                                <h3 className="text-lg font-semibold text-gray-300">Images (Carousel)</h3>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {homeData.upcomingMovie.images?.map((img, index) => (
+                                        <div key={index} className="relative group aspect-[2/3] bg-black/50 rounded-lg overflow-hidden border border-white/10">
+                                            <img src={img} alt="Upcoming" className="w-full h-full object-cover" />
+                                            <button
+                                                onClick={() => {
+                                                    const newImages = homeData.upcomingMovie.images.filter((_, i) => i !== index);
+                                                    const newData = { ...homeData, upcomingMovie: { ...homeData.upcomingMovie, images: newImages } };
+                                                    setHomeData(newData);
+                                                    fetch('http://localhost:5000/api/home', {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify(newData)
+                                                    });
+                                                }}
+                                                className="absolute top-2 right-2 p-2 bg-red-600 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                    {/* Upload New Button */}
+                                    <div className="aspect-[2/3] bg-white/5 border-2 border-dashed border-white/20 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-white/10 transition-colors relative cursor-pointer group">
+                                        <div className="p-4 bg-white/10 rounded-full group-hover:bg-[#d1ab2e] group-hover:text-black transition-colors">
+                                            <Upload size={24} />
+                                        </div>
+                                        <span className="text-sm font-bold text-gray-400 group-hover:text-white">ADD IMAGE</span>
+                                        <input
+                                            type="file"
+                                            className="absolute inset-0 opacity-0 cursor-pointer"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    const formData = new FormData();
+                                                    formData.append('image', e.target.files[0]);
+                                                    fetch('http://localhost:5000/api/upload', { method: 'POST', body: formData })
+                                                        .then(res => res.json())
+                                                        .then(data => {
+                                                            const currentImages = homeData.upcomingMovie.images || [];
+                                                            const newData = {
+                                                                ...homeData,
+                                                                upcomingMovie: {
+                                                                    ...homeData.upcomingMovie,
+                                                                    images: [...currentImages, data.url]
+                                                                }
+                                                            };
+                                                            setHomeData(newData);
+                                                            fetch('http://localhost:5000/api/home', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify(newData)
+                                                            });
+                                                        });
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold mb-6 border-b border-white/10 pb-4">Event Announcement</h2>
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                                <input value={homeData.eventAnnouncement.title} onChange={(e) => setHomeData(prev => ({ ...prev, eventAnnouncement: { ...prev.eventAnnouncement, title: e.target.value } }))} placeholder="Title" className="input-field" />
+                                <input value={homeData.eventAnnouncement.buttonText} onChange={(e) => setHomeData(prev => ({ ...prev, eventAnnouncement: { ...prev.eventAnnouncement, buttonText: e.target.value } }))} placeholder="Button Text" className="input-field" />
+                            </div>
+                            <textarea value={homeData.eventAnnouncement.description} onChange={(e) => setHomeData(prev => ({ ...prev, eventAnnouncement: { ...prev.eventAnnouncement, description: e.target.value } }))} placeholder="Description" className="input-field h-24 mb-4" />
+                            <div>
+                                <label className="block text-gray-400 mb-2">Background Image</label>
+                                {homeData.eventAnnouncement.backgroundImage && <img src={homeData.eventAnnouncement.backgroundImage} className="w-full h-48 object-cover rounded-lg border border-white/20 mb-2" />}
+                                <input type="file" onChange={(e) => handleHomeImageUpload(e, 'eventAnnouncement.backgroundImage')} className="file-input" />
+                            </div>
+                        </div>
+                        <Button onClick={handleHomeSave} className="save-btn">SAVE HOME CHANGES</Button>
+                    </div>
+                )}
+
+                {/* --- EVENTS TAB --- */}
+                {activeTab === 'events' && (
+                    <div className="space-y-8">
+                        {!editingEvent ? (
+                            <>
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-2xl font-bold">Manage Events</h2>
+                                    <Button onClick={() => setEditingEvent({ id: '', title: '', description: '', poster: '', color: '#000000', galleryImages: ['', '', ''] })} className="bg-[#d1ab2e] text-black">ADD NEW EVENT</Button>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+                                    {events.map(event => (
+                                        <div key={event.id} className="relative group bg-[#111] rounded-xl overflow-hidden border border-white/10 hover:border-[#d1ab2e] transition-all duration-300">
+                                            {/* Poster Aspect Ratio Container */}
+                                            <div className="aspect-[2/3] w-full relative">
+                                                <img
+                                                    src={event.poster}
+                                                    alt={event.title}
+                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
+
+                                                {/* Text Content */}
+                                                <div className="absolute bottom-0 left-0 right-0 p-4">
+                                                    <h3 className="text-xl font-bold text-white mb-1 leading-tight">{event.title}</h3>
+                                                    <p className="text-xs text-gray-400 line-clamp-2">{event.description}</p>
+                                                </div>
+                                            </div>
+
+                                            {/* Overlay Controls */}
+                                            <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 z-20 backdrop-blur-sm">
+                                                <h3 className="text-xl font-bold text-[#d1ab2e] mb-2 text-center px-4">{event.title}</h3>
+                                                <div className="flex gap-2">
+                                                    <Button onClick={() => setEditingEvent(event)} className="bg-white text-black hover:bg-[#d1ab2e] hover:text-white font-bold px-6 tracking-wider">EDIT</Button>
+                                                    <Button onClick={() => {
+                                                        if (window.confirm("Delete?")) {
+                                                            const updated = events.filter(e => e.id !== event.id);
+                                                            setEvents(updated);
+                                                            fetch('http://localhost:5000/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updated) });
+                                                        }
+                                                    }} variant="destructive" className="font-bold px-6 tracking-wider">DELETE</Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="bg-[#222] p-6 rounded-2xl border border-white/10">
+                                <h2 className="text-xl font-bold mb-6">Edit Event</h2>
+                                <div className="space-y-4">
+                                    <input value={editingEvent.title} onChange={e => setEditingEvent({ ...editingEvent, title: e.target.value })} placeholder="Title" className="input-field" />
+                                    <input type="color" value={editingEvent.color} onChange={e => setEditingEvent({ ...editingEvent, color: e.target.value })} className="h-10 w-full" />
+                                    <textarea value={editingEvent.description} onChange={e => setEditingEvent({ ...editingEvent, description: e.target.value })} placeholder="Description" className="input-field h-24" />
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="text-gray-400 text-sm">Event Date</label>
+                                            <input type="date" value={editingEvent.date || ''} onChange={e => setEditingEvent({ ...editingEvent, date: e.target.value })} className="input-field" />
+                                        </div>
+                                        <div>
+                                            <label className="text-gray-400 text-sm">Total Participants</label>
+                                            <input type="number" value={editingEvent.participants || ''} onChange={e => setEditingEvent({ ...editingEvent, participants: e.target.value })} className="input-field" placeholder="0" />
+                                        </div>
+                                        <div>
+                                            <label className="text-gray-400 text-sm">Row Assignment</label>
+                                            <select
+                                                value={editingEvent.row || '1'}
+                                                onChange={e => setEditingEvent({ ...editingEvent, row: e.target.value })}
+                                                className="input-field"
+                                            >
+                                                <option value="1">Row 1 (Top)</option>
+                                                <option value="2">Row 2 (Bottom)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-gray-400">Poster</label>
+                                        <input type="file" onChange={(e) => handleEventImageUpload(e, 'poster')} className="file-input mt-2" />
+                                        {editingEvent.poster && <img src={editingEvent.poster} className="mt-2 h-32 rounded" />}
+                                    </div>
+
+                                    <div>
+                                        <label className="text-gray-400">Gallery Images (3)</label>
+                                        <div className="grid grid-cols-3 gap-2 mt-2">
+                                            {[0, 1, 2].map(i => (
+                                                <div key={i}>
+                                                    <input type="file" onChange={(e) => handleEventImageUpload(e, 'gallery', i)} className="text-xs text-gray-400 mb-2" />
+                                                    <div className="aspect-[3/4] bg-black/50 overflow-hidden rounded border border-white/10">
+                                                        {editingEvent.galleryImages?.[i] && <img src={editingEvent.galleryImages[i]} className="w-full h-full object-cover" />}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <Button onClick={handleEventSave} className="save-btn flex-1">SAVE</Button>
+                                        <Button onClick={() => setEditingEvent(null)} variant="ghost">CANCEL</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* --- FILMS TAB --- */}
+                {activeTab === 'films' && (
+                    <div className="space-y-12">
+                        {!editingFilm ? (
+                            <>
+                                {['row1', 'row2'].map(row => (
+                                    <div key={row}>
+                                        <div className="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+                                            <h2 className="text-2xl font-bold uppercase">{row === 'row1' ? 'Now Showing (Row 1)' : 'Upcoming (Row 2)'}</h2>
+                                            <Button onClick={() => { setEditingFilm({ title: '', desc: '', poster: '', director: '', link: '' }); setEditingFilmRow(row); }} className="bg-[#d1ab2e] text-black">ADD FILM</Button>
+                                        </div>
+                                        <div className="flex gap-4 overflow-x-auto pb-4">
+                                            {filmsData[row as 'row1' | 'row2'].map((film, i) => (
+                                                <div key={i} className="min-w-[200px] w-[200px] bg-[#222] p-3 rounded border border-white/10">
+                                                    <div className="h-[300px] mb-3 overflow-hidden rounded">
+                                                        <img src={film.poster} className="w-full h-full object-cover" />
+                                                    </div>
+                                                    <h3 className="font-bold truncate">{film.title}</h3>
+                                                    <div className="flex gap-2 mt-2">
+                                                        <Button onClick={() => { setEditingFilm(film); setEditingFilmRow(row); }} variant="outline" size="sm" className="flex-1">Edit</Button>
+                                                        <Button onClick={() => handleFilmDelete(film, row as 'row1' | 'row2')} variant="destructive" size="sm" className="flex-1">Del</Button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </>
+                        ) : (
+                            <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+                                <div className="bg-[#1a1a1a] p-8 rounded-2xl w-full max-w-2xl border border-white/20 max-h-[90vh] overflow-y-auto">
+                                    <h2 className="text-3xl font-bold mb-6 text-[#d1ab2e]">Edit Film</h2>
+                                    <div className="space-y-4">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <input value={editingFilm.title} onChange={e => setEditingFilm({ ...editingFilm, title: e.target.value })} placeholder="Title" className="input-field" />
+                                            <input value={editingFilm.director} onChange={e => setEditingFilm({ ...editingFilm, director: e.target.value })} placeholder="Director" className="input-field" />
+                                        </div>
+                                        <textarea value={editingFilm.desc} onChange={e => setEditingFilm({ ...editingFilm, desc: e.target.value })} placeholder="Description" className="input-field h-32" />
+                                        <input value={editingFilm.link} onChange={e => setEditingFilm({ ...editingFilm, link: e.target.value })} placeholder="Youtube Link" className="input-field" />
+
+                                        <div className="flex items-center gap-4 bg-black/30 p-4 rounded">
+                                            <label className="text-gray-400">Row:</label>
+                                            <select value={editingFilmRow} onChange={e => setEditingFilmRow(e.target.value)} className="bg-black border border-white/20 rounded p-2 text-white">
+                                                <option value="row1">Row 1 (Now Showing)</option>
+                                                <option value="row2">Row 2 (Upcoming)</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-gray-400 mb-2">Poster</label>
+                                            <input type="file" onChange={(e) => handleFilmImageUpload(e, 'poster')} className="file-input" />
+                                            {editingFilm.poster && <img src={editingFilm.poster} className="mt-4 h-48 rounded border border-white/20" />}
+                                        </div>
+
+                                        <div className="flex gap-4 pt-4">
+                                            <Button onClick={handleFilmSave} className="save-btn flex-1">SAVE FILM</Button>
+                                            <Button onClick={() => setEditingFilm(null)} variant="ghost" className="flex-1">CANCEL</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* --- CONTACT TAB --- */}
+                {activeTab === 'contact' && (
+                    <div className="space-y-8">
+                        <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                            <h2 className="text-2xl font-bold">Inquiries / Messages</h2>
+                        </div>
+                        <div className="overflow-auto bg-[#222] rounded-lg border border-white/10">
+                            <table className="w-full text-left border-collapse">
+                                <thead className="bg-black/50 text-xs uppercase text-gray-400 font-bold sticky top-0">
+                                    <tr>
+                                        <th className="p-4 border-b border-white/10">Date</th>
+                                        <th className="p-4 border-b border-white/10">Name</th>
+                                        <th className="p-4 border-b border-white/10">Email</th>
+                                        <th className="p-4 border-b border-white/10">Message</th>
+                                        <th className="p-4 border-b border-white/10 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-sm text-gray-300 divide-y divide-white/5">
+                                    {contactMessages && contactMessages.length > 0 ? (
+                                        contactMessages.map((msg: any, idx: number) => (
+                                            <tr key={idx} className="hover:bg-white/5 transition-colors">
+                                                <td className="p-4 whitespace-nowrap text-gray-500">
+                                                    {msg.date ? new Date(msg.date).toLocaleDateString() : '-'}
+                                                </td>
+                                                <td className="p-4 font-medium text-white">{msg.name}</td>
+                                                <td className="p-4">{msg.email}</td>
+                                                <td className="p-4 max-w-xs truncate" title={msg.message}>
+                                                    {msg.message}
+                                                </td>
+                                                <td className="p-4 text-right">
+                                                    <button
+                                                        onClick={() => handleDeleteMessage(msg.id)}
+                                                        className="p-2 bg-red-600/20 hover:bg-red-600 text-red-500 hover:text-white rounded transition-colors"
+                                                        title="Delete message"
+                                                    >
+                                                        <Trash size={16} />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={5} className="p-8 text-center text-gray-500">
+                                                No messages found.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                {/* --- GALLERY TAB --- */}
+                {activeTab === 'gallery' && (
+                    <div className="space-y-8">
+                        <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                            <h2 className="text-2xl font-bold">Gallery Images</h2>
+                            <div className="relative">
+                                <input
+                                    type="file"
+                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                    onChange={async (e) => {
+                                        if (e.target.files && e.target.files[0]) {
+                                            const formData = new FormData();
+                                            formData.append('image', e.target.files[0]);
+                                            const res = await fetch('http://localhost:5000/api/upload', { method: 'POST', body: formData });
+                                            const data = await res.json();
+                                            const newImage = { img: data.url, height: 900 };
+                                            const updatedGallery = [...galleryData, newImage];
+                                            setGalleryData(updatedGallery);
+                                            await fetch('http://localhost:5000/api/gallery', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify(updatedGallery)
+                                            });
+                                        }
+                                    }}
+                                />
+                                <Button className="bg-[#d1ab2e] text-black hover:bg-[#e2bd44]">
+                                    <Upload size={16} className="mr-2" />
+                                    ADD IMAGE
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {galleryData.map((item, index) => (
+                                <div key={index} className="relative group aspect-square bg-black/50 rounded-lg overflow-hidden border border-white/10">
+                                    <img src={item.img} alt="Gallery" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
+                                        <input
+                                            type="number"
+                                            value={item.height}
+                                            onChange={(e) => {
+                                                const updated = [...galleryData];
+                                                updated[index].height = parseInt(e.target.value);
+                                                setGalleryData(updated);
+                                            }}
+                                            className="w-24 bg-black/50 border border-white/20 rounded p-1 text-white text-sm text-center"
+                                            placeholder="Height"
+                                        />
+                                        <button
+                                            onClick={async () => {
+                                                if (window.confirm("Delete this image?")) {
+                                                    const updated = galleryData.filter((_, i) => i !== index);
+                                                    setGalleryData(updated);
+                                                    await fetch('http://localhost:5000/api/gallery', {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify(updated)
+                                                    });
+                                                }
+                                            }}
+                                            className="p-2 bg-red-600 rounded text-white hover:bg-red-700 transition-colors"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <Button
+                            onClick={async () => {
+                                await fetch('http://localhost:5000/api/gallery', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(galleryData)
+                                });
+                                alert("Gallery saved!");
+                            }}
+                            className="save-btn"
+                        >
+                            SAVE GALLERY CHANGES
+                        </Button>
+                    </div>
+                )}
+            </div>
+
+            <style>{`
+                .input-field {
+                    width: 100%;
+                    background: rgba(0,0,0,0.5);
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 0.5rem;
+                    padding: 0.75rem;
+                    color: white;
+                    outline: none;
+                    }
+                .input-field:focus {
+                    border-color: #d1ab2e;
+                }
+                .file-input {
+                    display: block;
+                    width: 100%;
+                    font-size: 0.875rem;
+                    color: #9ca3af;
+                }
+                .file-input::file-selector-button {
+                    margin-right: 1rem;
+                    padding: 0.5rem 1rem;
+                    border-radius: 9999px;
+                    border: 0;
+                    font-size: 0.875rem;
+                    font-weight: 600;
+                    background-color: #d1ab2e;
+                    color: black;
+                    cursor: pointer;
+                }
+                .file-input::file-selector-button:hover {
+                    background-color: #e2bd44;
+                }
+                .save-btn {
+                    width: 100%;
+                    padding: 1.5rem;
+                    font-size: 1.125rem;
+                    font-weight: bold;
+                    background-color: #d1ab2e;
+                    color: black;
+                }
+                .save-btn:hover {
+                    background-color: #e2bd44;
+                }
+            `}</style>
+        </div >
+    );
+};
+
+export default Admin;
