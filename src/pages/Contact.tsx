@@ -1,12 +1,18 @@
 
-import React from "react";
+import React, { useState } from "react";
 import StaggeredMenu from "@/components/StaggeredMenu";
 import { Instagram, Linkedin, Youtube, Mail, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 const Contact = () => {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
     const menuItems = [
         { label: "Home", ariaLabel: "Go to home page", link: "/" },
         { label: "Globus", ariaLabel: "Globus", link: "/globus" },
@@ -23,6 +29,73 @@ const Contact = () => {
         { label: "LetterBox", link: "https://letterboxd.com/vitsion/" },
         { label: "YouTube", link: "http://www.youtube.com/@VITSIONMovieMakers" },
     ];
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const response = await fetch("http://localhost:5000/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ name, email, message }),
+            });
+
+            if (response.ok) {
+                toast.success("Message sent successfully!");
+                setName("");
+                setEmail("");
+                setMessage("");
+            } else {
+                toast.error("Failed to send message. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error sending message:", error);
+            toast.error("Network error. Is the backend server running?");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const [showAdmin, setShowAdmin] = useState(false);
+    const [messages, setMessages] = useState<any[]>([]);
+
+    React.useEffect(() => {
+        let buffer = "";
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key.length === 1) {
+                buffer += e.key.toLowerCase();
+                if (buffer.length > 4) {
+                    buffer = buffer.slice(-4);
+                }
+                if (buffer === "rsvp") {
+                    setShowAdmin(true);
+                    fetchMessages();
+                    buffer = ""; // Reset buffer
+                }
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
+    const fetchMessages = async () => {
+        try {
+            const res = await fetch("http://localhost:5000/api/contact");
+            if (res.ok) {
+                const data = await res.json();
+                setMessages(data);
+            } else {
+                toast.error("Failed to fetch messages");
+            }
+        } catch (error) {
+            console.error("Error fetching messages:", error);
+            toast.error("Error connecting to backend");
+        }
+    };
 
     return (
         <div className="min-h-screen w-full overflow-y-auto md:h-screen md:overflow-hidden bg-[#0a0a0aff] text-white font-sans selection:bg-white/20 flex flex-col items-center justify-center">
@@ -121,12 +194,15 @@ const Contact = () => {
                             </p>
                         </div>
 
-                        <form className="space-y-4 pt-2">
+                        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
                             <div className="space-y-1.5">
                                 <label htmlFor="name" className="text-xs font-medium text-gray-300 ml-1">Your Name</label>
                                 <Input
                                     id="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                     placeholder="Enter your name"
+                                    required
                                     className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 h-12 rounded-xl focus:border-white/30 focus:ring-0 transition-colors text-sm"
                                 />
                             </div>
@@ -136,7 +212,10 @@ const Contact = () => {
                                 <Input
                                     id="email"
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your email"
+                                    required
                                     className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 h-12 rounded-xl focus:border-white/30 focus:ring-0 transition-colors text-sm"
                                 />
                             </div>
@@ -145,22 +224,78 @@ const Contact = () => {
                                 <label htmlFor="message" className="text-xs font-medium text-gray-300 ml-1">Message</label>
                                 <Textarea
                                     id="message"
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
                                     placeholder="How can we help you?"
+                                    required
                                     className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 min-h-[120px] rounded-xl focus:border-white/30 focus:ring-0 resize-none transition-colors text-sm"
                                 />
                             </div>
 
                             <Button
+                                type="submit"
+                                disabled={loading}
                                 className="w-full h-12 bg-white text-black hover:bg-gray-200 text-base font-medium rounded-xl transition-colors mt-2"
                             >
-                                Send Message
-                                <Send className="w-4 h-4 ml-2" />
+                                {loading ? "Sending..." : "Send Message"}
+                                {!loading && <Send className="w-4 h-4 ml-2" />}
                             </Button>
                         </form>
                     </div>
 
                 </div>
             </main>
+
+            {/* ADMIN EASTER EGG MODAL */}
+            {showAdmin && (
+                <div className="fixed inset-0 z-[2000] bg-black/80 flex items-center justify-center p-4">
+                    <div className="bg-[#111] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[80vh] flex flex-col overflow-hidden shadow-2xl">
+                        <div className="p-6 border-b border-white/10 flex justify-between items-center">
+                            <h2 className="text-2xl font-bold text-white">Admin Panel - Messages</h2>
+                            <button
+                                onClick={() => setShowAdmin(false)}
+                                className="text-gray-400 hover:text-white transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                        <div className="overflow-auto p-0">
+                            <table className="w-full text-left border-collapse">
+                                <thead className="bg-white/5 text-xs uppercase text-gray-400 font-bold sticky top-0">
+                                    <tr>
+                                        <th className="p-4 border-b border-white/10">Date</th>
+                                        <th className="p-4 border-b border-white/10">Name</th>
+                                        <th className="p-4 border-b border-white/10">Email</th>
+                                        <th className="p-4 border-b border-white/10">Message</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-sm text-gray-300 divide-y divide-white/5">
+                                    {messages.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={4} className="p-8 text-center text-gray-500">
+                                                No messages found.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        messages.map((msg, idx) => (
+                                            <tr key={idx} className="hover:bg-white/5 transition-colors">
+                                                <td className="p-4 whitespace-nowrap text-gray-500">
+                                                    {new Date(msg.date).toLocaleDateString()}
+                                                </td>
+                                                <td className="p-4 font-medium text-white">{msg.name}</td>
+                                                <td className="p-4">{msg.email}</td>
+                                                <td className="p-4 max-w-xs truncate" title={msg.message}>
+                                                    {msg.message}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

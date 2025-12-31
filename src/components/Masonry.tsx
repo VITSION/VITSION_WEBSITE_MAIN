@@ -1,8 +1,11 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import './Masonry.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 
 
@@ -192,9 +195,15 @@ const Masonry = ({
                     opacity: 1,
                     ...animationProps,
                     ...(blurToFocus && { filter: 'blur(0px)' }),
-                    duration: 0.8,
-                    ease: 'power3.out',
-                    delay: index * stagger
+                    duration: 1.2,
+                    ease: 'power2.out',
+                    delay: (index % columns) * stagger,
+                    scrollTrigger: {
+                        trigger: selector,
+                        start: 'top 90%',
+                        end: 'bottom 20%',
+                        toggleActions: 'play reverse play reverse'
+                    }
                 });
             } else {
                 gsap.to(selector, {

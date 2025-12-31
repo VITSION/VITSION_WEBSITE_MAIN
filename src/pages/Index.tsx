@@ -101,23 +101,24 @@ const Index = () => {
       </motion.section>
       <motion.section>
         <div
-          className="relative z-10 w-full flex justify-center px-4 py-20 md:py-10"
+          className="relative z-10 w-full flex flex-col xl:flex-row items-center justify-center px-4 py-20 md:py-10 gap-8"
         >
           <div
             ref={upcomingTextRef}
-            className="text-white text-center w-[clamp(20rem,80vw,90rem)]
- font-sans font-black text-[clamp(1.6rem,3vw,10rem)] leading-[1] tracking-tight opacity-0">
+            className="text-white text-center xl:text-left font-sans font-black text-[clamp(2.5rem,4vw,6rem)] leading-[1] tracking-tight opacity-0 xl:w-1/3 p-4"
+          >
             Upcoming Event
           </div>
-          <motion.section
-            className="relative z-10 w-full flex justify-center px-4 py-20 md:py-10"
+
+          <motion.div
+            className="relative z-10 w-full xl:w-2/3 flex justify-center"
             initial={{ opacity: 0, y: 150 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: true, margin: "-100px" }}
           >
             <EventAnnouncement />
-          </motion.section>
+          </motion.div>
         </div>
 
       </motion.section>

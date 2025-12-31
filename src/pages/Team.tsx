@@ -28,7 +28,6 @@ export default function Team() {
             name: "Srivathsan",
             role: "Secretary",
             initial: "S",
-            quote: "Every frame tells a story.",
             favoriteFilm: "Everything Everywhere All At Once",
             image: "/teams/Srivathsan.jpg"
         },
@@ -37,7 +36,6 @@ export default function Team() {
             name: "Mohana Ramanan",
             role: "Vice Chairperson",
             initial: "M",
-            quote: "Editing is the soul of cinema.",
             favoriteFilm: "Whiplash",
             image: "/teams/Mohana_Ramanan_D.JPG"
         },
@@ -46,25 +44,22 @@ export default function Team() {
             name: "Gurusreeram",
             role: "Chairperson",
             initial: "G",
-            quote: "With a love for lighting and composition...",
             favoriteFilm: "The Grand Budapest Hotel",
             image: "/teams/Guru_sreeram.jpg"
         },
         {
             id: 2,
             name: "Rashmi",
-            role: "Vice Chariperson",
+            role: "Vice Chairperson",
             initial: "R",
-            quote: "Production is where the magic becomes reality.",
             favoriteFilm: "Roma",
-            image: null // No image found
+            image: "/teams/rashmi.jpg"
         },
         {
             id: 1,
             name: "Thanmayya Vinod",
             role: "Joint Secretary",
             initial: "T",
-            quote: "Vision is the art of seeing what is invisible to others.",
             favoriteFilm: "Inception",
             image: "/teams/Thanmayya_Vinod.PNG"
         }
@@ -173,7 +168,7 @@ export default function Team() {
                             >
                                 <div className="text-xs md:text-[0.7vw] uppercase tracking-widest text-blue-300 font-bold mb-1 md:mb-[0.3vw]">FAVORITE FILM</div>
                                 <div className="text-white font-medium text-lg md:text-[1.1vw] mb-3 md:mb-[1vw] text-center italic leading-tight">{member.favoriteFilm}</div>
-                                <p className="text-gray-400 text-sm md:text-[0.85vw] text-center leading-relaxed px-2 md:px-[0.5vw]">"{member.quote}"</p>
+
                             </motion.div>
                         </div>
                     ))}
