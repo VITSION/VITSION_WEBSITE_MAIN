@@ -41,15 +41,15 @@ const cardData = [
     },
     {
         color: '#060010',
-        title: 'Integration',
-        description: 'Connect favorite tools',
-        label: 'Connectivity'
+        title: '',
+        description: '',
+        label: ''
     },
     {
         color: '#060010',
-        title: 'Security',
-        description: 'Enterprise-grade protection',
-        label: 'Protection'
+        title: '',
+        description: '',
+        label: ''
     }
 ];
 

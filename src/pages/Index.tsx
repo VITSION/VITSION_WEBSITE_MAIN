@@ -120,7 +120,7 @@ const Index = () => {
       {/* TITLE */}
       <section
         ref={titleRef}
-        className="relative z-10 py-24 md:py-24 flex justify-center overflow-hidden  border-t-8 border-[#d1ab2e]"
+        className="relative z-10 py-24 md:py-24 flex justify-center overflow-hidden"
       >
         <motion.h6
           style={{ x, opacity }}

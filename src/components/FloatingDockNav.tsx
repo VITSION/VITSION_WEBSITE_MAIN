@@ -50,13 +50,13 @@ const FloatingDockNav = () => {
                     alt="Logo"
                     className={cn(
                         "object-contain",
-                        scrolled ? "w-6 h-6" : "w-8 h-8 md:w-10 md:h-10"
+                        scrolled ? "h-12 w-auto" : "h-[7rem] w-auto"
                     )}
                 />
 
                 {/* Logo text only on desktop */}
                 {!scrolled && (
-                    <span className="hidden md:block text-xl font-bold tracking-widest text-white">
+                    <span className="hidden md:block text-2xl font-bold tracking-widest text-white">
                         VITSION
                     </span>
                 )}
